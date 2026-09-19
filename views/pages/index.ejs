@@ -43,7 +43,7 @@
           <p class="featured-excerpt"><%= featured.subtitle %></p>
 
           <div class="card-meta">
-            <span>Topics: <%= featured.tags.slice(0, 3).join(' · ') %></span>
+            <span>Topics: <%= (featured && featured.tags && Array.isArray(featured.tags)) ? featured.tags.slice(0, 3).join(' · ') : '' %></span>
             <span>•</span>
             <span>Read Article →</span>
           </div>
