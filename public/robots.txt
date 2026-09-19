@@ -1,0 +1,20 @@
+# ==============================================================================
+# EUREKA Editorial Journal — Robots.txt
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Allow: /post/
+Allow: /category/
+Allow: /tag/
+Allow: /about
+Allow: /privacy
+Allow: /terms
+Allow: /contact
+
+# Disallow internal studio and raw APIs
+Disallow: /api/
+Disallow: /editor
+
+# Sitemap declaration
+Sitemap: https://eureka-journal.org/sitemap.xml

@@ -1,0 +1,137 @@
+<%- include('../partials/head') %>
+
+<!-- Link Editor Styles -->
+<link rel="stylesheet" href="/css/editor.css">
+
+<main class="editor-container">
+  <div class="container">
+    <form action="/editor" method="POST">
+      <!-- Editor Header Bar -->
+      <div class="editor-header-bar">
+        <div class="editor-title-area">
+          <span class="badge badge-accent">STUDIO</span>
+          <h1 style="font-size: var(--text-xl); margin: 0;">Author Dispatch</h1>
+        </div>
+
+        <div class="editor-actions">
+          <div class="editor-stats">
+            <span id="word-count">0 words</span>
+            <span>•</span>
+            <span id="reading-time">1 min read</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <input 
+              type="password" 
+              name="editorialKey" 
+              id="editor-auth-key" 
+              class="input-text" 
+              placeholder="Editorial Key" 
+              title="Enter your editorial key to authenticate publishing"
+              style="width: 130px; font-size: 0.78rem; padding: 0.35rem 0.6rem; height: 34px;" 
+            />
+            <button type="submit" class="nav-action-btn" style="height: 34px;">
+              Publish Essay →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <% if (error) { %>
+        <div style="padding: 1rem; margin-bottom: 1.5rem; background: rgba(220, 38, 38, 0.1); border: 1px solid var(--color-destructive); color: var(--color-destructive); border-radius: var(--radius-sm);">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <!-- Split Pane (Editor + Live Preview) -->
+      <div class="editor-split-pane">
+        <!-- Left: Authoring Inputs -->
+        <div class="editor-pane">
+          <div class="pane-header">
+            <span>Markdown Source</span>
+            <div class="markdown-toolbar">
+              <button type="button" class="toolbar-btn" data-action="bold" title="Bold">B</button>
+              <button type="button" class="toolbar-btn" data-action="italic" title="Italic">I</button>
+              <button type="button" class="toolbar-btn" data-action="h2" title="H2 Heading">H2</button>
+              <button type="button" class="toolbar-btn" data-action="h3" title="H3 Heading">H3</button>
+              <button type="button" class="toolbar-btn" data-action="quote" title="Blockquote">”</button>
+              <button type="button" class="toolbar-btn" data-action="code" title="Code Block">&lt;/&gt;</button>
+              <button type="button" class="toolbar-btn" data-action="list" title="Bullet List">•</button>
+            </div>
+          </div>
+
+          <div class="editor-form">
+            <div class="form-group">
+              <input 
+                type="text" 
+                id="editor-title" 
+                name="title" 
+                class="input-title" 
+                placeholder="Title: The Philosophy of Clean Systems..." 
+                required 
+              />
+            </div>
+
+            <div class="form-group">
+              <input 
+                type="text" 
+                name="subtitle" 
+                class="input-subtitle" 
+                placeholder="Subtitle or deck explaining the core thesis..." 
+              />
+            </div>
+
+            <div class="editor-meta-row">
+              <div>
+                <label style="font-size: var(--text-xs); color: var(--color-muted-foreground); display: block; margin-bottom: 4px;">Category</label>
+                <select name="category" class="input-select">
+                  <% categories.forEach(cat => { %>
+                    <option value="<%= cat.slug %>"><%= cat.name %></option>
+                  <% }) %>
+                </select>
+              </div>
+
+              <div>
+                <label style="font-size: var(--text-xs); color: var(--color-muted-foreground); display: block; margin-bottom: 4px;">Tags (comma separated)</label>
+                <input type="text" name="tags" class="input-text" placeholder="Psychology, Relationships, Attachment" />
+              </div>
+            </div>
+
+            <div class="editor-meta-row">
+              <div>
+                <label style="font-size: var(--text-xs); color: var(--color-muted-foreground); display: block; margin-bottom: 4px;">Author Name</label>
+                <input type="text" name="authorName" class="input-text" placeholder="EUREKA Research" />
+              </div>
+
+              <div>
+                <label style="font-size: var(--text-xs); color: var(--color-muted-foreground); display: block; margin-bottom: 4px;">Author Role</label>
+                <input type="text" name="authorRole" class="input-text" placeholder="Research Fellow" />
+              </div>
+            </div>
+
+            <textarea 
+              id="editor-content" 
+              name="content" 
+              class="editor-textarea" 
+              placeholder="Write your essay in GitHub Flavored Markdown...&#10;&#10;## 1. Introduction&#10;Start with a compelling premise..." 
+              required
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Right: Live Preview -->
+        <div class="editor-pane">
+          <div class="pane-header">
+            <span>Live Article Preview</span>
+            <span style="font-size: 0.75rem; color: var(--color-accent);">Swiss Modernism 2.0</span>
+          </div>
+
+          <div id="preview-content" class="preview-pane"></div>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script src="/js/editor.js"></script>
+<%- include('../partials/scripts') %>

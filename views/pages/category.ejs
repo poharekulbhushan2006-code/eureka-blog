@@ -1,0 +1,63 @@
+<%- include('../partials/head') %>
+
+<main>
+  <header style="padding: var(--space-12) 0 var(--space-8); border-bottom: 1px solid var(--color-border); background-color: var(--color-card);">
+    <div class="container">
+      <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-2);">
+        <%= isTag ? 'TOPIC TAG' : 'DISCIPLINE CATEGORY' %>
+      </div>
+      <h1 style="font-size: var(--text-4xl); margin-bottom: var(--space-3);"><%= categoryName %></h1>
+      <p style="font-size: var(--text-lg); color: var(--color-muted-foreground); max-width: 680px;">
+        <%= categoryMeta ? categoryMeta.description : '' %>
+      </p>
+    </div>
+  </header>
+
+  <section class="feed-section">
+    <div class="container">
+      <% if (posts.length === 0) { %>
+        <div style="padding: var(--space-16) 0; text-align: center;">
+          <p style="font-size: var(--text-lg); color: var(--color-muted-foreground);">No publications found under this topic yet.</p>
+          <a href="/" class="badge badge-primary" style="margin-top: var(--space-4); display: inline-flex;">Return Home</a>
+        </div>
+      <% } else { %>
+        <div class="posts-grid">
+          <% posts.forEach(post => { %>
+            <article class="post-card">
+              <div class="post-card-visual" style="background: <%= post.coverGradient %>;">
+                <span class="badge" style="background: rgba(0,0,0,0.6); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                  <%= post.category %>
+                </span>
+              </div>
+
+              <div class="post-card-body">
+                <div class="post-card-meta">
+                  <span><%= post.publishedAt %></span>
+                  <span>•</span>
+                  <span><%= post.readingTime %></span>
+                </div>
+
+                <h3 class="post-card-title">
+                  <a href="/post/<%= post.slug %>"><%= post.title %></a>
+                </h3>
+
+                <p class="post-card-excerpt"><%= post.excerpt %></p>
+
+                <div class="post-card-footer">
+                  <div class="author-chip">
+                    <img src="<%= post.author.avatar %>" alt="<%= post.author.name %>" class="author-avatar" style="width: 28px; height: 28px;" />
+                    <span style="font-size: var(--text-xs); font-weight: 500;"><%= post.author.name %></span>
+                  </div>
+
+                  <span style="font-size: var(--text-xs); color: var(--color-muted-foreground);">👏 <%= post.claps || 0 %></span>
+                </div>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/scripts') %>

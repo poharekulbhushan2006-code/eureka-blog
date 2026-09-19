@@ -1,0 +1,33 @@
+<div id="search-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
+  <div class="search-modal">
+    <div class="search-modal-header">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-muted-foreground);">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input 
+        type="text" 
+        id="search-modal-input" 
+        class="search-modal-input" 
+        placeholder="Search articles, tags, authors, or systems concepts..." 
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button id="search-modal-close" class="kbd-shortcut" style="cursor: pointer;" aria-label="Close search">ESC</button>
+    </div>
+
+    <ul id="search-results-list" class="search-results-list">
+      <li style="padding: 1.5rem; text-align: center; color: var(--color-muted-foreground); font-size: 0.9rem;">
+        Type an article title, concept, or tag...
+      </li>
+    </ul>
+
+    <div class="search-modal-footer">
+      <div style="display: flex; gap: 1rem;">
+        <span><kbd class="kbd-shortcut">↑</kbd> <kbd class="kbd-shortcut">↓</kbd> Navigate</span>
+        <span><kbd class="kbd-shortcut">↵</kbd> Select</span>
+      </div>
+      <div><span><kbd class="kbd-shortcut">ESC</kbd> Close</span></div>
+    </div>
+  </div>
+</div>

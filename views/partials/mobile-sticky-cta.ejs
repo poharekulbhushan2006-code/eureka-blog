@@ -1,0 +1,30 @@
+<!-- Mobile Sticky Bottom Action Bar (Appears on screens < 768px) -->
+<div id="mobile-sticky-cta" class="mobile-sticky-cta" role="complementary" aria-label="Mobile Navigation and Actions">
+  <div class="mobile-sticky-inner">
+    <% if (typeof pageType !== 'undefined' && pageType === 'post') { %>
+      <button type="button" class="mobile-cta-btn primary" id="mobile-share-trigger" aria-label="Share this essay">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+        <span>Share Essay</span>
+      </button>
+      <a href="/" class="mobile-cta-btn secondary">
+        <span>More Essays</span>
+      </a>
+    <% } else { %>
+      <a href="/post/attachment-is-not-proof-someone-is-good-for-you" class="mobile-cta-btn primary">
+        <span>Read Flagship Essay</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+      <a href="/about" class="mobile-cta-btn secondary">
+        <span>About</span>
+      </a>
+    <% } %>
+  </div>
+</div>

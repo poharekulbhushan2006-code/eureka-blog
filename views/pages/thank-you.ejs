@@ -1,0 +1,30 @@
+<%- include('../partials/head') %>
+
+<main style="padding: var(--space-16) 0 var(--space-24); text-align: center;">
+  <div class="container" style="max-width: 680px;">
+    <div style="width: 64px; height: 64px; margin: 0 auto var(--space-6); border-radius: 50%; background-color: var(--color-accent-subtle); display: flex; align-items: center; justify-content: center; color: var(--color-accent);">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+    </div>
+
+    <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-2);">
+      CONFIRMATION OF RECEIPT
+    </div>
+
+    <h1 style="font-size: clamp(2rem, 4.5vw, 3rem); font-family: var(--font-serif); margin-bottom: var(--space-4); line-height: 1.2;">
+      Your dispatch has reached the editorial desk.
+    </h1>
+
+    <p style="font-size: var(--text-lg); color: var(--color-muted-foreground); margin-bottom: var(--space-8); line-height: 1.6;">
+      Thank you for your thoughts and perspective. Our editorial research team will review your inquiry and follow up within 24–48 hours if required.
+    </p>
+
+    <div style="display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap;">
+      <a href="/" class="btn btn-primary" style="padding: 12px 24px;">Return to Front Page</a>
+      <a href="/post/attachment-is-not-proof-someone-is-good-for-you" class="btn btn-secondary" style="padding: 12px 24px;">Read Flagship Essay</a>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/scripts') %>

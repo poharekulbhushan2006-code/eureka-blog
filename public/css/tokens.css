@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ==========================================================================
+     EUREKA — Clean, Simple & User-Friendly Design System
+     Palette: Soft Warm White, Charcoal Ink, Gentle Purple Accent
+     ========================================================================== */
+  
+  /* Colors - Light Mode (Clean, calm, easy on eyes) */
+  --color-primary: #18181b;         /* Soft Charcoal */
+  --color-on-primary: #ffffff;
+  --color-secondary: #4f46e5;       /* Gentle Indigo Accent */
+  --color-accent: #7c3aed;          /* Soft Purple */
+  --color-accent-hover: #6d28d9;
+  
+  --color-background: #fdfdfc;      /* Soft Warm White */
+  --color-foreground: #18181b;      /* Crisp Dark Slate */
+  --color-card: #ffffff;            /* Pure White Cards */
+  --color-muted: #f4f4f5;           /* Very Soft Gray */
+  --color-muted-foreground: #52525b;/* Balanced Gray for Secondary Text */
+  --color-border: #e4e4e7;          /* Clean Subtle Border */
+  --color-border-subtle: #f4f4f5;
+
+  /* Typography Stack */
+  --font-serif: 'Lora', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Normal, Human-Readable Font Sizes */
+  --text-xs: 0.8rem;
+  --text-sm: 0.9rem;
+  --text-base: 1.0625rem;  /* 17px - ideal reading size */
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 2.75rem;
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Container & Radius */
+  --container-max: 1040px;
+  --container-prose: 720px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  /* Subtle, Natural Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+}
+
+/* Colors - Dark Mode (Soft, relaxed, no harsh glare) */
+[data-theme="dark"] {
+  --color-primary: #f4f4f5;
+  --color-on-primary: #18181b;
+  --color-secondary: #818cf8;
+  --color-accent: #a78bfa;
+  --color-accent-hover: #c4b5fd;
+
+  --color-background: #121214;      /* Soft Charcoal Black */
+  --color-foreground: #f4f4f5;
+  --color-card: #18181b;            /* Subtle Dark Card */
+  --color-muted: #27272a;
+  --color-muted-foreground: #a1a1aa;
+  --color-border: #27272a;
+  --color-border-subtle: #1f1f23;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5);
+}

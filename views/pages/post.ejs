@@ -1,0 +1,119 @@
+<%- include('../partials/head') %>
+
+<!-- Link Article Styles -->
+<link rel="stylesheet" href="/css/article.css">
+
+<main>
+  <!-- Clean, Distraction-Free Article Header -->
+  <header class="article-header">
+    <div class="container article-header-inner" style="max-width: 760px;">
+      <div class="article-kicker">
+        <span class="badge badge-accent"><%= post.category %></span>
+        <span style="font-size: var(--text-xs); color: var(--color-muted-foreground);">•</span>
+        <span style="font-size: var(--text-xs); color: var(--color-muted-foreground);"><%= post.readingTime %></span>
+        <span style="font-size: var(--text-xs); color: var(--color-muted-foreground);">•</span>
+        <span style="font-size: var(--text-xs); color: var(--color-muted-foreground);"><%= post.publishedAt %></span>
+      </div>
+
+      <h1 class="article-headline"><%= post.title %></h1>
+
+      <% if (post.subtitle) { %>
+        <p class="article-deck"><%= post.subtitle %></p>
+      <% } %>
+    </div>
+  </header>
+
+  <!-- Article Content with Left Side Topic Showcase -->
+  <div class="article-layout-wrapper">
+    <% if (typeof otherPosts !== 'undefined' && otherPosts && otherPosts.length > 0) { %>
+      <aside class="article-sidebar-left" aria-label="Explore other topics">
+        <div class="sidebar-sticky-inner">
+          <div class="sidebar-header">
+            <span class="sidebar-dot"></span>
+            <span class="sidebar-kicker">ANOTHER TOPIC</span>
+          </div>
+
+          <% otherPosts.forEach(other => { %>
+            <a href="/post/<%= other.slug %>" class="other-topic-card" title="Read <%= other.title %>">
+              <% if (other.heroImage) { %>
+                <div class="other-topic-img-wrap">
+                  <img src="<%= other.heroImage %>" alt="<%= other.title %>" class="other-topic-img" loading="lazy">
+                  <span class="other-topic-badge"><%= other.category %></span>
+                </div>
+              <% } else { %>
+                <div class="other-topic-badge-standalone"><%= other.category %></div>
+              <% } %>
+
+              <div class="other-topic-body">
+                <h4 class="other-topic-title"><%= other.title %></h4>
+                <% if (other.subtitle) { %>
+                  <p class="other-topic-deck"><%= other.subtitle %></p>
+                <% } %>
+                <div class="other-topic-meta">
+                  <span><%= other.readingTime %></span>
+                  <span class="other-topic-arrow">Read Essay →</span>
+                </div>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+      </aside>
+    <% } %>
+
+    <div class="article-container">
+      <article class="article-prose">
+        <%- post.renderedHtml %>
+      </article>
+
+      <!-- Clean Bottom Actions -->
+      <div class="article-actions-bar">
+        <div style="display: flex; gap: var(--space-3);">
+          <button id="clap-btn" class="action-btn" data-slug="<%= post.slug %>" title="Applaud essay">
+            <span>👏</span>
+            <span id="clap-count" style="font-weight: 600;"><%= post.claps || 0 %></span>
+          </button>
+
+          <button id="bookmark-btn" class="action-btn" data-slug="<%= post.slug %>" data-title="<%= post.title %>" title="Save to reading list">
+            <span>🔖</span>
+            <span>Save</span>
+          </button>
+        </div>
+
+        <button id="share-btn" class="action-btn" title="Copy share link">
+          <span>🔗</span>
+          <span>Share Link</span>
+        </button>
+      </div>
+
+      <!-- Tags -->
+      <% if (post.tags && post.tags.length > 0) { %>
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--color-border);">
+          <% post.tags.forEach(tag => { %>
+            <a href="/tag/<%= encodeURIComponent(tag) %>" class="badge">#<%= tag %></a>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Related Reading (Simple 2-Column List) -->
+  <% if (related && related.length > 0) { %>
+    <section style="padding: var(--space-10) 0; border-top: 1px solid var(--color-border); background-color: var(--color-muted);">
+      <div class="container" style="max-width: 760px;">
+        <h3 style="font-size: var(--text-lg); margin-bottom: var(--space-4);">Further Reading</h3>
+        <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+          <% related.forEach(rel => { %>
+            <a href="/post/<%= rel.slug %>" style="display: block; padding: var(--space-4); background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
+              <div style="font-size: var(--text-xs); color: var(--color-accent); font-weight: 600; margin-bottom: 2px;"><%= rel.category %></div>
+              <h4 style="font-size: var(--text-base); margin-bottom: 2px;"><%= rel.title %></h4>
+              <div style="font-size: var(--text-xs); color: var(--color-muted-foreground);"><%= rel.readingTime %></div>
+            </a>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+  <% } %>
+</main>
+
+<%- include('../partials/scripts') %>
+

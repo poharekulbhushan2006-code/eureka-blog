@@ -1,0 +1,95 @@
+<%- include('../partials/head') %>
+
+<main>
+  <!-- Clean & Welcoming Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div style="font-family: var(--font-sans); font-size: var(--text-xs); font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: var(--space-2);">
+        EURE<span style="color: #ec4899; font-weight: 900;">KA</span>
+      </div>
+
+      <h1 class="hero-title">
+        Understanding the ideas behind how we think, feel, and behave.
+      </h1>
+
+      <p class="hero-subtitle">
+        Psychology, human behavior, relationships, decision-making, and the patterns that shape everyday life — explained clearly and thoughtfully.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#articles" class="btn-primary">
+          Explore Essays ↓
+        </a>
+        <a href="/post/attachment-is-not-proof-someone-is-good-for-you" class="btn-secondary">
+          Featured: Attachment & Relationships →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Article -->
+  <% if (featured) { %>
+    <section class="featured-section">
+      <div class="container">
+        <div class="section-label">Featured Article</div>
+        <a href="/post/<%= featured.slug %>" class="featured-card">
+          <div style="display: flex; gap: var(--space-2); margin-bottom: var(--space-2);">
+            <span class="badge badge-accent"><%= featured.category %></span>
+            <span class="badge"><%= featured.readingTime %></span>
+          </div>
+
+          <h2 class="featured-title"><%= featured.title %></h2>
+
+          <p class="featured-excerpt"><%= featured.subtitle %></p>
+
+          <div class="card-meta">
+            <span>Topics: <%= featured.tags.slice(0, 3).join(' · ') %></span>
+            <span>•</span>
+            <span>Read Article →</span>
+          </div>
+        </a>
+      </div>
+    </section>
+  <% } %>
+
+  <!-- Articles List Section -->
+  <section id="articles" style="padding: var(--space-10) 0;">
+    <div class="container">
+      <!-- Simple Articles List -->
+      <div class="articles-list">
+        <% posts.forEach(post => { %>
+          <a href="/post/<%= post.slug %>" class="article-item">
+            <div style="display: flex; gap: var(--space-2); align-items: center; margin-bottom: var(--space-2);">
+              <span class="badge"><%= post.category %></span>
+              <span style="font-size: var(--text-xs); color: var(--color-muted-foreground);"><%= post.readingTime %></span>
+              <span style="font-size: var(--text-xs); color: var(--color-muted-foreground);">•</span>
+              <span style="font-size: var(--text-xs); color: var(--color-muted-foreground);"><%= post.publishedAt %></span>
+            </div>
+
+            <h3 class="article-item-title"><%= post.title %></h3>
+
+            <p class="article-item-excerpt"><%= post.excerpt %></p>
+
+            <div style="font-size: var(--text-xs); font-weight: 500; color: var(--color-accent);">
+              Read Essay →
+            </div>
+          </a>
+        <% }) %>
+      </div>
+
+      <!-- Clean Newsletter Box -->
+      <div class="newsletter-box">
+        <h3 class="newsletter-title">Subscribe to EUREKA</h3>
+        <p class="newsletter-subtitle">
+          Thoughtful explorations of psychology, relationships, and human behavior. Delivered weekly with zero spam.
+        </p>
+        <form id="newsletter-form" class="newsletter-form">
+          <input type="email" placeholder="Your email address" class="newsletter-input" required />
+          <button type="submit" class="btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/scripts') %>
