@@ -6,10 +6,10 @@ export const postController = {
     try {
       const page = parseInt(req.query.page) || 1;
       const featured = await postService.getFeaturedPost();
-      const trending = await postService.getTrendingPosts(4);
-      const { posts, total, totalPages } = await postService.getAllPosts({ page, limit: 6 });
-      const categories = await postService.getAllCategories();
-      const tags = await postService.getAllTags();
+      const trending = (await postService.getTrendingPosts(4)) || [];
+      const { posts = [], total = 0, totalPages = 1 } = (await postService.getAllPosts({ page, limit: 6 })) || {};
+      const categories = (await postService.getAllCategories()) || [];
+      const tags = (await postService.getAllTags()) || [];
 
       res.render('pages/index', {
         title: `${siteConfig.name} — ${siteConfig.tagline}`,
@@ -28,7 +28,8 @@ export const postController = {
         activePath: '/'
       });
     } catch (err) {
-      next(err);
+      console.error('getHome error:', err);
+      res.status(500).send(`Homepage Render Error: ${err.message}\n${err.stack}`);
     }
   },
 
