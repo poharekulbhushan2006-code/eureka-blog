@@ -5,31 +5,57 @@ import { marked } from 'marked';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DATA_FILE = process.env.VERCEL ? path.join(process.cwd(), 'data/posts.json') : path.join(__dirname, '../../data/posts.json');
+
+// Robust path resolution for both local and Vercel serverless environments
+function resolveDataFile() {
+  const candidates = [
+    path.join(process.cwd(), 'data/posts.json'),
+    path.join(__dirname, '../../data/posts.json'),
+    path.join(__dirname, '../data/posts.json'),
+    '/var/task/data/posts.json',
+  ];
+  // Return first existing path or default to cwd-based
+  // (We'll try all at runtime in loadPosts)
+  return candidates;
+}
+
+const DATA_FILE_CANDIDATES = resolveDataFile();
+
+console.log('[postService] cwd:', process.cwd());
+console.log('[postService] __dirname:', __dirname);
+console.log('[postService] DATA_FILE_CANDIDATES:', DATA_FILE_CANDIDATES);
 
 class PostService {
   constructor() {
     this.postsCache = null;
     this.lastLoaded = 0;
+    this.activeDataFile = DATA_FILE_CANDIDATES[0]; // default, updated when successfully read
   }
 
   async loadPosts() {
-    try {
-      const raw = await fs.readFile(DATA_FILE, 'utf-8');
-      this.postsCache = JSON.parse(raw);
-      this.lastLoaded = Date.now();
-      return this.postsCache;
-    } catch (err) {
-      console.error('Error reading posts file:', err);
-      return this.postsCache || [];
+    // Try each candidate path until one works
+    for (const candidate of DATA_FILE_CANDIDATES) {
+      try {
+        const raw = await fs.readFile(candidate, 'utf-8');
+        const parsed = JSON.parse(raw);
+        this.postsCache = parsed;
+        this.lastLoaded = Date.now();
+        this.activeDataFile = candidate;
+        console.log(`[postService] Loaded ${parsed.length} posts from: ${candidate}`);
+        return this.postsCache;
+      } catch (err) {
+        console.warn(`[postService] Could not read ${candidate}:`, err.message);
+      }
     }
+    console.error('[postService] All data file paths failed! Returning empty array.');
+    return this.postsCache || [];
   }
 
   async getPosts() {
-    if (process.env.NODE_ENV !== 'production' || !this.postsCache || Date.now() - this.lastLoaded > 5000) {
+    if (!this.postsCache || Date.now() - this.lastLoaded > 60000) {
       await this.loadPosts();
     }
-    return this.postsCache;
+    return this.postsCache || [];
   }
 
   calculateReadingTime(text) {
@@ -226,7 +252,11 @@ class PostService {
     };
 
     posts.unshift(newPost);
-    await fs.writeFile(DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
+    try {
+      await fs.writeFile(this.activeDataFile, JSON.stringify(posts, null, 2), 'utf-8');
+    } catch (writeErr) {
+      console.warn('[postService] Could not persist post (read-only filesystem on Vercel):', writeErr.message);
+    }
     this.postsCache = posts;
     this.lastLoaded = Date.now();
     return newPost;
@@ -237,7 +267,11 @@ class PostService {
     const post = posts.find(p => p.slug === slug);
     if (!post) return null;
     post.claps = (post.claps || 0) + 1;
-    await fs.writeFile(DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
+    try {
+      await fs.writeFile(this.activeDataFile, JSON.stringify(posts, null, 2), 'utf-8');
+    } catch (writeErr) {
+      console.warn('[postService] Could not persist claps (read-only filesystem on Vercel):', writeErr.message);
+    }
     return post.claps;
   }
 

@@ -1,3 +1,9 @@
-import morgan from 'morgan';
-
-export const requestLogger = morgan(':method :url :status :res[content-length] - :response-time ms');
+// Simple request logger (no external dependency - safe for Vercel serverless)
+export function requestLogger(req, res, next) {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(`${req.method} ${req.url} ${res.statusCode} - ${duration}ms`);
+  });
+  next();
+}
