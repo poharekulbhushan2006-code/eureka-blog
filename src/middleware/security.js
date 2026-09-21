@@ -3,27 +3,37 @@
 // Rate Limiting, Input Sanitization, Security Headers & Editorial Auth
 // ==========================================================================
 
-// 1. In-Memory Sliding Window Rate Limiter (Zero External Dependency)
+// 1. Serverless-safe Rate Limiter
+// Uses in-memory Map on long-running servers (local dev).
+// On Vercel serverless, functions are stateless per-request so persistent
+// rate limiting is not feasible — Vercel's edge network handles DDoS protection.
+const IS_SERVERLESS = !!process.env.VERCEL;
+
 class SlidingWindowRateLimiter {
   constructor(windowMs, maxRequests, message = 'Too many requests, please try again later.') {
     this.windowMs = windowMs;
     this.maxRequests = maxRequests;
     this.message = message;
-    this.hits = new Map();
-
-    // Clean up stale IP records every 5 minutes
-    setInterval(() => {
-      const now = Date.now();
-      for (const [ip, record] of this.hits.entries()) {
-        if (now - record.startTime > this.windowMs) {
-          this.hits.delete(ip);
+    if (!IS_SERVERLESS) {
+      this.hits = new Map();
+      // Only run cleanup interval on persistent (non-serverless) servers
+      const timer = setInterval(() => {
+        const now = Date.now();
+        for (const [ip, record] of this.hits.entries()) {
+          if (now - record.startTime > this.windowMs) {
+            this.hits.delete(ip);
+          }
         }
-      }
-    }, 5 * 60 * 1000).unref();
+      }, 5 * 60 * 1000);
+      if (timer.unref) timer.unref();
+    }
   }
 
   middleware() {
     return (req, res, next) => {
+      // On serverless: skip rate limiting (Vercel edge handles it)
+      if (IS_SERVERLESS) return next();
+
       let ip = req.ip;
       if (!ip && req.headers['x-forwarded-for']) {
         const forwarded = req.headers['x-forwarded-for'];
