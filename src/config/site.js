@@ -6,53 +6,60 @@ export const siteConfig = {
   engineeredBy: 'Kulbhushan Pohare',
   researchedAndWrittenBy: 'Antara Morankar',
   author: 'EUREKA Editorial',
+  volume: 'Volume I • Est. 2026',
+  instagramUrl: 'https://www.instagram.com/eureka.discoveries?stkn=MWZ5MjZrbmF2aW05OQ==',
+  instagramHandle: '@eureka.discoveries',
+  socials: {
+    instagram: 'https://www.instagram.com/eureka.discoveries?stkn=MWZ5MjZrbmF2aW05OQ==',
+    email: 'mailto:poharekulbhushan2006@gmail.com'
+  },
   navItems: [
-    { label: 'Home', path: '/' },
+    { label: 'Essays', path: '/' },
     { label: 'About', path: '/about' },
-    { label: 'Write', path: '/editor', isAction: true }
+    { label: 'Author Studio', path: '/editor', isAction: true }
   ],
   categories: [
     {
       name: 'Psychology',
       slug: 'Psychology',
       description: 'Human behavior, cognitive biases, memory, emotions, self-awareness, and decision-making.',
-      color: '#7c3aed'
+      color: '#c2410c'
     },
     {
       name: 'Relationships',
       slug: 'Relationships',
       description: 'Attachment theory, communication, healthy boundaries, emotional dependency, compatibility, and trust.',
-      color: '#ec4899'
+      color: '#b45309'
     },
     {
       name: 'Human Behavior',
       slug: 'Human Behavior',
       description: 'Habits, social dynamics, motivation, reinforcement loops, and behavioral patterns in everyday life.',
-      color: '#f43f5e'
+      color: '#475569'
     },
     {
       name: 'Mind & Consciousness',
       slug: 'Mind & Consciousness',
       description: 'Perception, self-concept, identity, focused attention, and the mystery of conscious experience.',
-      color: '#6366f1'
+      color: '#0f766e'
     },
     {
       name: 'Science Explained',
       slug: 'Science Explained',
       description: 'Rigorous explanations of psychological, behavioral, and quantum science in clear, accessible language.',
-      color: '#0ea5e9'
+      color: '#0369a1'
     },
     {
       name: 'Philosophy & Ideas',
       slug: 'Philosophy & Ideas',
       description: 'Timeless questions about identity, meaning, relationships, society, and the human condition.',
-      color: '#d97706'
+      color: '#78350f'
     },
     {
       name: 'History & Civilization',
       slug: 'History & Civilization',
       description: 'The rise and fall of empires, institutional evolution, geopolitics, and historical systems that shaped human society.',
-      color: '#b45309'
+      color: '#334155'
     }
   ],
   footerLinks: [

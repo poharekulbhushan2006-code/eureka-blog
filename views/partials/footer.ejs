@@ -1,35 +1,67 @@
 <footer class="site-footer">
   <div class="container">
-    <!-- Clean & Simple Credits -->
-    <div class="footer-credits-box">
-      <div class="footer-credit-item">
-        <span>Engineered by</span>
-        <strong>Kulbhushan Pohare</strong>
+    <!-- Top Editorial Footer Row with Instagram Highlight & Masthead Info -->
+    <div class="footer-editorial-masthead">
+      <div class="footer-brand-col">
+        <div class="footer-brand-title">EUREKA</div>
+        <p class="footer-brand-desc">
+          An independent journal of cognitive science, psychological dynamics, and human decision systems. Engineered for distraction-free intellectual reading.
+        </p>
+        <div class="footer-social-row">
+          <a href="<%= siteConfig.instagramUrl %>" target="_blank" rel="noopener noreferrer" class="footer-ig-badge" title="Follow @eureka.discoveries on Instagram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>Instagram: <strong>@eureka.discoveries</strong> ↗</span>
+          </a>
+          <a href="/rss.xml" class="footer-rss-badge" target="_blank" rel="noopener" title="Subscribe to RSS Feed">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 11a9 9 0 0 1 9 9"></path>
+              <path d="M4 4a16 16 0 0 1 16 16"></path>
+              <circle cx="5" cy="19" r="1"></circle>
+            </svg>
+            <span>RSS</span>
+          </a>
+        </div>
       </div>
-      <div class="footer-credit-item">
-        <span>Researched & Written by</span>
-        <strong>Antara Morankar</strong>
+
+      <!-- Masthead Credits Box -->
+      <div class="footer-credits-box">
+        <div class="footer-credit-item">
+          <span class="credit-label">ENGINEERING & PLATFORM</span>
+          <strong class="credit-name">Kulbhushan Pohare</strong>
+          <span class="credit-role">Node.js / Express Full-Stack Architecture</span>
+        </div>
+        <div class="footer-credit-item">
+          <span class="credit-label">RESEARCH & ESSAYS</span>
+          <strong class="credit-name">Antara Morankar</strong>
+          <span class="credit-role">Cognitive Psychology & Behavioral Inquiry</span>
+        </div>
       </div>
     </div>
 
     <!-- Editorial Navigation & Legal Links -->
-    <div class="footer-nav-links" style="display: flex; justify-content: center; gap: var(--space-6); flex-wrap: wrap; margin: var(--space-6) 0 var(--space-4); font-size: var(--text-sm);">
-      <a href="/about" style="color: var(--color-muted-foreground); text-decoration: none;">About EUREKA</a>
-      <a href="/privacy" style="color: var(--color-muted-foreground); text-decoration: none;">Privacy Policy</a>
-      <a href="/terms" style="color: var(--color-muted-foreground); text-decoration: none;">Terms & Standards</a>
-      <a href="/contact" style="color: var(--color-muted-foreground); text-decoration: none;">Contact & Office</a>
-      <a href="/sitemap.xml" style="color: var(--color-muted-foreground); text-decoration: none;">Sitemap</a>
-      <a href="/editor" style="color: var(--color-muted-foreground); text-decoration: none;">Author Studio</a>
+    <div class="footer-nav-links">
+      <a href="/" class="footer-nav-link">Essays</a>
+      <a href="/about" class="footer-nav-link">About EUREKA</a>
+      <a href="/privacy" class="footer-nav-link">Privacy Policy</a>
+      <a href="/terms" class="footer-nav-link">Terms & Standards</a>
+      <a href="/contact" class="footer-nav-link">Contact & Office</a>
+      <a href="/sitemap.xml" class="footer-nav-link">Sitemap</a>
+      <a href="/editor" class="footer-nav-link">Author Studio</a>
+      <a href="<%= siteConfig.instagramUrl %>" target="_blank" rel="noopener noreferrer" class="footer-nav-link" style="color: var(--color-instagram);">Instagram Channel ↗</a>
     </div>
 
     <!-- Physical Address & Contact -->
-    <div style="text-align: center; font-size: var(--text-xs); color: var(--color-muted-foreground); margin-bottom: var(--space-6); line-height: 1.6;">
-      Nagpur & Nanded, Maharashtra, India • <a href="mailto:poharekulbhushan2006@gmail.com" style="color: var(--color-accent); text-decoration: none;">poharekulbhushan2006@gmail.com</a>
+    <div class="footer-office-row">
+      Editorial Offices: Nagpur & Nanded, Maharashtra, India • <a href="mailto:poharekulbhushan2006@gmail.com" class="footer-email-link">poharekulbhushan2006@gmail.com</a>
     </div>
 
     <div class="footer-bottom">
       <div>© <%= new Date().getFullYear() %> EUREKA. All rights reserved.</div>
-      <div>Understanding how we think, feel, and behave.</div>
+      <div>Understanding the architectures behind how we think, feel, and behave.</div>
     </div>
   </div>
 </footer>

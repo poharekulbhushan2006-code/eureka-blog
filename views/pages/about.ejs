@@ -1,65 +1,109 @@
 <%- include('../partials/head') %>
 
-<main style="padding: var(--space-12) 0 var(--space-20);">
-  <div class="container" style="max-width: 820px;">
-    <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-2);">
-      ABOUT EUREKA
+<main class="about-page-main" style="padding: var(--space-12) 0 var(--space-20);">
+  <div class="container" style="max-width: 840px;">
+    
+    <div class="about-masthead-kicker">
+      <span>INSTITUTIONAL STATEMENT</span>
+      <span class="about-kicker-sep">•</span>
+      <span>ESTABLISHED 2026</span>
     </div>
-    <h1 style="font-size: clamp(2.5rem, 5vw, 3.75rem); margin-bottom: var(--space-6); line-height: 1.15;">
+
+    <h1 class="about-title">
       Understanding the ideas behind how we think, feel, and behave.
     </h1>
 
     <div class="article-prose">
-      <p style="font-size: var(--text-lg); line-height: 1.7; color: var(--color-foreground);">
-        <strong>EUREKA</strong> is a knowledge and exploration platform focused on psychology, human behavior, science, ideas, and the patterns hidden in everyday life.
+      <p class="about-lead">
+        <strong>EUREKA</strong> is an independent digital journal investigating cognitive psychology, behavioral decision systems, mental models, and the evolutionary habits that govern everyday human interaction.
       </p>
 
       <p>
-        Too much of modern psychology content on social media relies on catchy buzzwords, oversimplified diagnoses, and pop-culture aphorisms. EUREKA was founded to bridge the gap between rigorous scientific research and thoughtful, accessible visual storytelling.
+        Too much modern discourse surrounding human psychology relies on viral catchphrases, algorithmic drama, and pseudoscientific shortcuts. EUREKA was conceived as an intellectual sanctuary: a platform where rigorous scientific inquiry meets thoughtful, distraction-free editorial prose.
       </p>
 
       <blockquote>
         "You can understand why you feel attached without allowing the feeling to decide what is healthy for you."
       </blockquote>
 
-      <h2 id="categories">Our Core Disciplines</h2>
-      <ul>
-        <li><strong>🧠 Psychology:</strong> Human behavior, cognitive biases, memory, emotions, self-awareness, and decision-making.</li>
-        <li><strong>❤️ Relationships:</strong> Attachment theory, communication, healthy boundaries, emotional dependency, compatibility, and trust.</li>
-        <li><strong>🧬 Human Behavior:</strong> Habits, social dynamics, motivation, reinforcement loops, and behavioral patterns.</li>
-        <li><strong>🌌 Mind & Consciousness:</strong> Perception, identity, self-concept, attention, and consciousness.</li>
-        <li><strong>📚 Science Explained:</strong> Long-form explanations of psychological, behavioral, and quantum physical research in simple language.</li>
-        <li><strong>💭 Philosophy & Ideas:</strong> Questions about identity, meaning, relationships, society, and human experience.</li>
-      </ul>
-
-      <hr />
-
-      <h2 id="research">Research & Scientific Sources</h2>
-      <p>
-        Credibility matters. Every psychology and science article published on EUREKA concludes with a dedicated <strong>Sources & Further Reading</strong> section citing peer-reviewed papers, foundational texts, and academic journals. We believe that curiosity thrives best when grounded in evidence.
-      </p>
-
-      <hr />
-
-      <h2 id="editorial">Credits & Editorial Direction</h2>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-6); margin: var(--space-8) 0;">
-        <div style="padding: var(--space-6); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background-color: var(--color-card);">
-          <div style="font-size: var(--text-lg); font-weight: 700;">Kulbhushan Pohare</div>
-          <div style="font-size: var(--text-xs); color: var(--color-accent); font-weight: 600; margin-bottom: var(--space-2);">Engineered by • Nagpur & Nanded</div>
-          <p style="font-size: var(--text-sm); color: var(--color-muted-foreground); margin: 0 0 var(--space-2) 0;">Full-stack systems engineering, performance optimization, and architectural implementation of the EUREKA platform.</p>
-          <div style="font-size: var(--text-xs);"><a href="mailto:poharekulbhushan2006@gmail.com" style="color: var(--color-accent); text-decoration: none;">poharekulbhushan2006@gmail.com</a></div>
-        </div>
-
-        <div style="padding: var(--space-6); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background-color: var(--color-card);">
-          <div style="font-size: var(--text-lg); font-weight: 700;">Antara Morankar</div>
-          <div style="font-size: var(--text-xs); color: var(--color-accent); font-weight: 600; margin-bottom: var(--space-2);">Researched & Written by</div>
-          <p style="font-size: var(--text-sm); color: var(--color-muted-foreground); margin: 0;">Psychological research synthesis, behavioral analysis, scientific literature curation, and long-form essays.</p>
+      <!-- OFFICIAL INSTAGRAM CHANNEL CALLOUT -->
+      <div class="about-ig-card">
+        <div class="about-ig-card-inner">
+          <div class="about-ig-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </div>
+          <div class="about-ig-text">
+            <h3>Visual Science on Instagram: @eureka.discoveries</h3>
+            <p>
+              In addition to our long-form essays, we publish daily infographics, mental model diagrams, and cognitive bias breakdowns on our official channel.
+            </p>
+            <a href="<%= siteConfig.instagramUrl %>" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;">
+              Follow @eureka.discoveries on Instagram ↗
+            </a>
+          </div>
         </div>
       </div>
 
-      <h2 id="standards">Contributing to EUREKA</h2>
+      <h2 id="disciplines">Core Disciplines & Research Axes</h2>
+      <div class="disciplines-grid">
+        <div class="discipline-card">
+          <h4>Cognitive Psychology</h4>
+          <p>Heuristics, memory encoding, perceptual filters, cognitive biases, and executive decision-making.</p>
+        </div>
+        <div class="discipline-card">
+          <h4>Attachment & Relational Systems</h4>
+          <p>Attachment dynamics, communication fidelity, emotional boundaries, and compatibility matrices.</p>
+        </div>
+        <div class="discipline-card">
+          <h4>Behavioral Reinforcement</h4>
+          <p>Habit feedback loops, motivation architectures, dopamine regulation, and social incentives.</p>
+        </div>
+        <div class="discipline-card">
+          <h4>Consciousness & Identity</h4>
+          <p>Self-concept formulation, attention span economics, and introspective awareness.</p>
+        </div>
+        <div class="discipline-card">
+          <h4>Physical & Quantum Sciences</h4>
+          <p>Conceptual translations of physics, quantum mechanics, and empirical sciences into accessible mental models.</p>
+        </div>
+        <div class="discipline-card">
+          <h4>Philosophy of Human Nature</h4>
+          <p>Ethics, existential inquiries, epistemology, and historical models of civilization and thought.</p>
+        </div>
+      </div>
+
+      <hr />
+
+      <h2 id="editorial">Editorial Masthead & Technical Provenance</h2>
+      <div class="about-credits-grid">
+        <div class="about-credit-card">
+          <div class="about-credit-name">Kulbhushan Pohare</div>
+          <div class="about-credit-role">Full-Stack Platform Architect</div>
+          <p class="about-credit-bio">
+            Engineered the EUREKA publication using a robust, custom Node.js & Express server architecture, zero-dependency editorial styling, fast server-side rendering, and privacy-first reader interactions.
+          </p>
+          <div class="about-credit-contact">
+            Location: Nagpur & Nanded, Maharashtra • 
+            <a href="mailto:poharekulbhushan2006@gmail.com">poharekulbhushan2006@gmail.com</a>
+          </div>
+        </div>
+
+        <div class="about-credit-card">
+          <div class="about-credit-name">Antara Morankar</div>
+          <div class="about-credit-role">Research Director & Lead Essayist</div>
+          <p class="about-credit-bio">
+            Directs scientific research synthesis, psychological literature reviews, and authored the flagship essays on attachment theory and relational psychology.
+          </p>
+        </div>
+      </div>
+
+      <h2 id="standards">Contributing & Writing</h2>
       <p>
-        Have a psychological insight, behavioral pattern analysis, or scientific explainer to share? You can draft and preview your dispatch directly in <a href="/editor" style="color: var(--color-accent); text-decoration: underline;">Eureka Studio</a>.
+        Have a psychological insight, behavioral model, or scientific essay to submit? You can format and preview your draft directly in <a href="/editor" style="color: var(--color-accent); text-decoration: underline;">Eureka Studio</a>.
       </p>
     </div>
   </div>

@@ -50,61 +50,9 @@
   </script>
 </head>
 <body data-page="<%= typeof pageType !== 'undefined' ? pageType : 'default' %>" data-topic="<%= typeof topic !== 'undefined' ? topic : 'default' %>">
-  <!-- Top Navigation & Page Loading Bar -->
-  <div id="page-nav-loader" class="page-nav-loader" aria-hidden="true">
-    <div class="nav-loader-bar"></div>
-  </div>
-
   <!-- Reading Progress Bar -->
   <div id="reading-progress-container">
     <div id="reading-progress-bar"></div>
-  </div>
-
-  <!-- Elegant Website Opening Intro Animation -->
-  <div id="site-intro-overlay" class="site-intro-overlay" aria-hidden="true">
-    <div class="intro-content">
-      <div class="intro-logo-mark">
-        <svg width="68" height="68" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="intro-emblem-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#7c3aed" />
-              <stop offset="50%" stop-color="#a855f7" />
-              <stop offset="100%" stop-color="#ec4899" />
-            </linearGradient>
-          </defs>
-          <rect width="36" height="36" rx="9" fill="url(#intro-emblem-grad)" opacity="0.22" />
-          <rect x="0.75" y="0.75" width="34.5" height="34.5" rx="8.25" stroke="url(#intro-emblem-grad)" stroke-width="1.8" />
-          <path d="M10 10.5H21M10 18H18M10 25.5H21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M22 13L26 18L22 23" stroke="#ec4899" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <circle cx="26" cy="18" r="2" fill="#ec4899" />
-        </svg>
-      </div>
-      <div class="intro-brand">
-        <span class="intro-letter" style="--i: 0">E</span>
-        <span class="intro-letter" style="--i: 1">U</span>
-        <span class="intro-letter" style="--i: 2">R</span>
-        <span class="intro-letter" style="--i: 3">E</span>
-        <span class="intro-letter intro-highlight" style="--i: 4">K</span>
-        <span class="intro-letter intro-highlight" style="--i: 5">A</span>
-      </div>
-      <p class="intro-tagline">Understanding how we think, feel, and behave.</p>
-      <div class="intro-loader-line">
-        <div class="intro-loader-progress"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Ambient EUREKA Background & Topic Dynamic Engine -->
-  <div id="eureka-ambient-bg" class="eureka-ambient-bg" aria-hidden="true">
-    <div class="eureka-bg-letters">
-      <span class="bg-letter" style="--i: 0">E</span>
-      <span class="bg-letter" style="--i: 1">U</span>
-      <span class="bg-letter" style="--i: 2">R</span>
-      <span class="bg-letter" style="--i: 3">E</span>
-      <span class="bg-letter bg-letter-highlight" style="--i: 4">K</span>
-      <span class="bg-letter bg-letter-highlight" style="--i: 5">A</span>
-    </div>
-    <canvas id="dynamic-bg-canvas" class="dynamic-bg-canvas"></canvas>
   </div>
 
   <%- include('header') %>
