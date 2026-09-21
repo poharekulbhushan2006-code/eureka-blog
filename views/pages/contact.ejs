@@ -1,0 +1,156 @@
+<%- include('../partials/head') %>
+
+<main style="padding: var(--space-12) 0 var(--space-20);">
+  <div class="container" style="max-width: 960px;">
+    <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-2);">
+      GET IN TOUCH
+    </div>
+    
+    <h1 style="font-size: clamp(2.25rem, 4.5vw, 3.25rem); font-family: var(--font-serif); margin-bottom: var(--space-4); line-height: 1.2;">
+      Editorial Office & Reader Inquiries
+    </h1>
+
+    <p style="font-size: var(--text-lg); color: var(--color-muted-foreground); max-width: 680px; margin-bottom: var(--space-10); line-height: 1.6;">
+      Have a question about an article, a research paper citation, or an idea to discuss? Reach out directly to the EUREKA editorial and engineering teams.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-10); align-items: start;">
+      <!-- Contact Details & Real Address -->
+      <div>
+        <div style="background-color: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-6); margin-bottom: var(--space-6);">
+          <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--space-3);">
+            Offices & Editorial Presence
+          </div>
+          <h2 style="font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-2); font-family: var(--font-serif);">
+            EUREKA Editorial Desk
+          </h2>
+          <div style="font-size: var(--text-sm); color: var(--color-foreground); line-height: 1.6; margin-bottom: var(--space-4);">
+            <div style="margin-bottom: 8px;">
+              <strong>Nagpur Office:</strong><br>
+              Nagpur, Maharashtra, India
+            </div>
+            <div>
+              <strong>Nanded Office:</strong><br>
+              Nanded, Maharashtra, India
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: var(--space-3); font-size: var(--text-sm); border-top: 1px solid var(--color-border); padding-top: var(--space-4);">
+            <div>
+              <strong style="color: var(--color-muted-foreground);">Direct Email & Inquiries:</strong><br>
+              <a href="mailto:poharekulbhushan2006@gmail.com" style="color: var(--color-accent); font-weight: 500;">poharekulbhushan2006@gmail.com</a>
+            </div>
+            <div>
+              <strong style="color: var(--color-muted-foreground);">Engineering & Architecture:</strong><br>
+              <a href="mailto:poharekulbhushan2006@gmail.com" style="color: var(--color-accent); font-weight: 500;">poharekulbhushan2006@gmail.com</a>
+            </div>
+            <div>
+              <strong style="color: var(--color-muted-foreground);">Response Time:</strong><br>
+              <span style="color: var(--color-muted-foreground);">Within 24–48 business hours</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background-color: var(--color-accent-subtle); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-5);">
+          <div style="font-weight: 600; font-size: var(--text-sm); margin-bottom: var(--space-1); color: var(--color-accent);">
+            Founding Team
+          </div>
+          <p style="font-size: var(--text-xs); color: var(--color-muted-foreground); margin: 0; line-height: 1.6;">
+            <strong>Kulbhushan Pohare</strong> (Lead Engineer)<br>
+            <strong>Antara Morankar</strong> (Lead Researcher & Author)
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive Contact Form -->
+      <div style="background-color: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-8);">
+        <h2 style="font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-2); font-family: var(--font-serif);">
+          Send a Dispatch
+        </h2>
+        <p style="font-size: var(--text-sm); color: var(--color-muted-foreground); margin-bottom: var(--space-6);">
+          All dispatches are encrypted in transit and reviewed by our editorial team.
+        </p>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="form-error-alert" style="padding: 12px 16px; background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm); color: #ef4444; font-size: var(--text-sm); margin-bottom: var(--space-4);">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <form action="/contact" method="POST" id="eureka-contact-form" class="eureka-validated-form" novalidate>
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label for="contact-name" style="display: block; font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-1); color: var(--color-foreground);">
+              Your Name <span style="color: var(--color-accent);">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="contact-name" 
+              name="name" 
+              required 
+              placeholder="e.g. Dr. Maya Patel"
+              class="form-input"
+              style="width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background-color: var(--color-bg); color: var(--color-foreground); font-size: var(--text-sm);"
+            />
+            <span class="field-error-msg" style="display: none; font-size: var(--text-xs); color: #ef4444; margin-top: 4px;">Please enter your name.</span>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label for="contact-email" style="display: block; font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-1); color: var(--color-foreground);">
+              Email Address <span style="color: var(--color-accent);">*</span>
+            </label>
+            <input 
+              type="email" 
+              id="contact-email" 
+              name="email" 
+              required 
+              placeholder="name@institution.org"
+              class="form-input"
+              style="width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background-color: var(--color-bg); color: var(--color-foreground); font-size: var(--text-sm);"
+            />
+            <span class="field-error-msg" style="display: none; font-size: var(--text-xs); color: #ef4444; margin-top: 4px;">Please provide a valid email address.</span>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label for="contact-subject" style="display: block; font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-1); color: var(--color-foreground);">
+              Topic / Department
+            </label>
+            <select 
+              id="contact-subject" 
+              name="subject" 
+              class="form-input"
+              style="width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background-color: var(--color-bg); color: var(--color-foreground); font-size: var(--text-sm);"
+            >
+              <option value="Editorial Feedback">Editorial Feedback & Commentary</option>
+              <option value="Research Proposal">Research Proposal / Citation Question</option>
+              <option value="Correction Request">Factual Correction Request</option>
+              <option value="Technical Inquiry">Technical & Platform Inquiry</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-6);">
+            <label for="contact-message" style="display: block; font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-1); color: var(--color-foreground);">
+              Message <span style="color: var(--color-accent);">*</span>
+            </label>
+            <textarea 
+              id="contact-message" 
+              name="message" 
+              rows="5" 
+              required 
+              placeholder="Your dispatch, commentary, or research query..."
+              class="form-input"
+              style="width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background-color: var(--color-bg); color: var(--color-foreground); font-size: var(--text-sm); font-family: var(--font-sans); line-height: 1.5;"
+            ></textarea>
+            <span class="field-error-msg" style="display: none; font-size: var(--text-xs); color: #ef4444; margin-top: 4px;">Please enter your message (minimum 10 characters).</span>
+          </div>
+
+          <button type="submit" id="contact-submit-btn" class="btn btn-primary" style="width: 100%; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span class="btn-text">Transmit Dispatch</span>
+            <span class="btn-spinner" style="display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite;"></span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/scripts') %>
