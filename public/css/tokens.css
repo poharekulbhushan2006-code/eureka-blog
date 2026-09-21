@@ -7,25 +7,29 @@
      Accent: Editorial Warm Terracotta & Cognac Amber
      ========================================================================== */
 
-  /* Primary Editorial Palette - Light Mode */
-  --color-primary: #1c1917;         /* Deep Warm Ink */
-  --color-on-primary: #ffffff;
-  --color-secondary: #44403c;       /* Muted Stone */
-  --color-accent: #c2410c;          /* Refined Warm Terracotta */
-  --color-accent-hover: #9a3412;
-  --color-accent-subtle: #fff7ed;   /* Very soft warm tint */
-  --color-accent-border: #fed7aa;
+  /* Primary Editorial Palette - Permanent Dark Mode */
+  --color-primary: #f5f5f4;
+  --color-on-primary: #1c1917;
+  --color-secondary: #a8a29e;
+  --color-accent: #fb923c;          /* Glowing Warm Terracotta */
+  --color-accent-hover: #fdba74;
+  --color-accent-subtle: rgba(251, 146, 60, 0.12);
+  --color-accent-border: rgba(251, 146, 60, 0.3);
 
-  --color-instagram: #e1306c;       /* Authentic Instagram Brand Color */
-  --color-instagram-hover: #c13584;
+  --color-instagram: #f472b6;
+  --color-instagram-hover: #fb7185;
 
-  --color-background: #fbfbfa;      /* Editorial Natural Cream / Warm Paper */
-  --color-foreground: #1c1917;      /* Rich Charcoal Slate */
-  --color-card: #ffffff;            /* Crisp Sheet White */
-  --color-muted: #f4f3f0;           /* Soft Parchment Gray */
-  --color-muted-foreground: #57534e;/* Balanced Warm Reading Gray */
-  --color-border: #e7e5e4;          /* Precise Hairline Border */
-  --color-border-subtle: #f0eeeb;
+  --color-background: #111215;      /* Deep Basalt Ink */
+  --color-foreground: #f4f4f5;      /* Crisp Ivory */
+  --color-card: #18191e;            /* Elevated Slate Panel */
+  --color-muted: #212229;           /* Secondary Panel */
+  --color-muted-foreground: #a1a1aa;/* Calm Reading Gray */
+  --color-border: #2b2c36;          /* Hairline Slate */
+  --color-border-subtle: #212229;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.6);
 
   /* Typography Stack */
   --font-serif: 'Newsreader', Charter, 'Bitstream Charter', Georgia, serif;

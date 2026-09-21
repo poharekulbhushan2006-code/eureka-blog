@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Topic detection: check body dataset
   const topic = document.body.dataset.topic || 'default';
   const isPost = document.body.dataset.page === 'post';
-  const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+  const isDark = () => true;
 
   // 3D Parallax Typography Controller for .eureka-bg-letters
   const bgLettersContainer = document.querySelector('.eureka-bg-letters');

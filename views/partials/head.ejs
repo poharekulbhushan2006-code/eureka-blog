@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,14 +39,10 @@
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/animations.css">
 
-  <!-- Early Theme Initialization to Prevent Flash of Unstyled Content (FOUC) -->
+  <!-- Permanent Dark Mode Initialization -->
   <script>
-    (function() {
-      var saved = localStorage.getItem('eureka-theme');
-      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      var theme = saved || (prefersDark ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
-    })();
+    document.documentElement.setAttribute('data-theme', 'dark');
+    try { localStorage.setItem('eureka-theme', 'dark'); } catch(e) {}
   </script>
 </head>
 <body data-page="<%= typeof pageType !== 'undefined' ? pageType : 'default' %>" data-topic="<%= typeof topic !== 'undefined' ? topic : 'default' %>">
