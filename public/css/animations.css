@@ -220,15 +220,18 @@ body {
   0% { transform: translateY(0px) rotate(0deg); }
   50% { transform: translateY(-16px) rotate(1deg); }
   100% { transform: translateY(8px) rotate(-1deg); }
+}
+
 /* Dynamic Canvas Background */
 .dynamic-bg-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: -2;
-  display: block;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: -2 !important;
+  display: block !important;
 }
 
 /* ==========================================================================
