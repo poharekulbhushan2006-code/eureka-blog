@@ -220,6 +220,15 @@ body {
   0% { transform: translateY(0px) rotate(0deg); }
   50% { transform: translateY(-16px) rotate(1deg); }
   100% { transform: translateY(8px) rotate(-1deg); }
+/* Dynamic Canvas Background */
+.dynamic-bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -2;
+  display: block;
 }
 
 /* ==========================================================================
@@ -374,6 +383,151 @@ main {
 @keyframes toastIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+/* ==========================================================================
+   5. Topic-Specific Ambiance & Background Adaptations
+   ========================================================================== */
+
+/* Topic Specific Styles: Quantum / Science */
+body[data-topic="quantum"] {
+  --color-accent: #0284c7;
+  --color-accent-hover: #0369a1;
+  background: 
+    radial-gradient(ellipse 85% 55% at 50% 0%, rgba(14, 165, 233, 0.12) 0%, rgba(99, 102, 241, 0.05) 45%, transparent 75%),
+    radial-gradient(circle at 12% 35%, rgba(56, 189, 248, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 88% 65%, rgba(139, 92, 246, 0.06) 0%, transparent 45%),
+    var(--color-background);
+}
+
+[data-theme="dark"] body[data-topic="quantum"] {
+  --color-accent: #38bdf8;
+  --color-accent-hover: #7dd3fc;
+  background: 
+    radial-gradient(ellipse 85% 55% at 50% 0%, rgba(56, 189, 248, 0.15) 0%, rgba(99, 102, 241, 0.08) 45%, transparent 75%),
+    radial-gradient(circle at 12% 35%, rgba(14, 165, 233, 0.10) 0%, transparent 40%),
+    radial-gradient(circle at 88% 65%, rgba(139, 92, 246, 0.09) 0%, transparent 45%),
+    #060913;
+}
+
+body[data-topic="quantum"] .bg-letter {
+  font-family: var(--font-mono);
+  letter-spacing: 0.14em;
+}
+
+body[data-topic="quantum"] .bg-letter-highlight {
+  background: linear-gradient(
+    135deg,
+    #0284c7 0%,
+    #00f0ff 30%,
+    #38bdf8 60%,
+    #818cf8 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.28;
+  filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.45));
+}
+
+[data-theme="dark"] body[data-topic="quantum"] .bg-letter-highlight {
+  opacity: 0.35;
+  filter: drop-shadow(0 0 55px rgba(56, 189, 248, 0.6)) drop-shadow(0 0 25px rgba(99, 102, 241, 0.5));
+}
+
+/* Topic Specific Styles: Psychology / Attachment */
+body[data-topic="psychology"] {
+  --color-accent: #7c3aed;
+  --color-accent-hover: #6d28d9;
+  background: 
+    radial-gradient(ellipse 85% 55% at 50% 0%, rgba(236, 72, 153, 0.11) 0%, rgba(124, 58, 237, 0.06) 45%, transparent 75%),
+    radial-gradient(circle at 12% 35%, rgba(244, 63, 94, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 88% 65%, rgba(168, 85, 247, 0.06) 0%, transparent 45%),
+    var(--color-background);
+}
+
+[data-theme="dark"] body[data-topic="psychology"] {
+  --color-accent: #a855f7;
+  --color-accent-hover: #c084fc;
+  background: 
+    radial-gradient(ellipse 85% 55% at 50% 0%, rgba(236, 72, 153, 0.16) 0%, rgba(124, 58, 237, 0.09) 45%, transparent 75%),
+    radial-gradient(circle at 12% 35%, rgba(244, 63, 94, 0.09) 0%, transparent 40%),
+    radial-gradient(circle at 88% 65%, rgba(168, 85, 247, 0.09) 0%, transparent 45%),
+    #0c0814;
+}
+
+body[data-topic="psychology"] .bg-letter {
+  font-family: var(--font-serif);
+  letter-spacing: 0.10em;
+}
+
+body[data-topic="psychology"] .bg-letter-highlight {
+  background: linear-gradient(
+    135deg,
+    #7c3aed 0%,
+    #a855f7 25%,
+    #ec4899 55%,
+    #fb7185 85%,
+    #ec4899 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.28;
+  filter: drop-shadow(0 0 35px rgba(236, 72, 153, 0.45));
+}
+
+[data-theme="dark"] body[data-topic="psychology"] .bg-letter-highlight {
+  opacity: 0.35;
+  filter: drop-shadow(0 0 55px rgba(236, 72, 153, 0.6)) drop-shadow(0 0 25px rgba(168, 85, 247, 0.5));
+}
+
+/* Topic Specific Styles: Rome / History */
+body[data-topic="rome"] {
+  --color-accent: #d97706;
+  --color-accent-hover: #b45309;
+  background: 
+    radial-gradient(ellipse 85% 55% at 50% 0%, rgba(245, 158, 11, 0.11) 0%, rgba(180, 83, 9, 0.05) 45%, transparent 75%),
+    radial-gradient(circle at 12% 35%, rgba(159, 18, 57, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 88% 65%, rgba(217, 119, 6, 0.06) 0%, transparent 45%),
+    var(--color-background);
+}
+
+[data-theme="dark"] body[data-topic="rome"] {
+  --color-accent: #f59e0b;
+  --color-accent-hover: #fbbf24;
+  background: 
+    radial-gradient(ellipse 85% 55% at 50% 0%, rgba(245, 158, 11, 0.16) 0%, rgba(180, 83, 9, 0.08) 45%, transparent 75%),
+    radial-gradient(circle at 12% 35%, rgba(159, 18, 57, 0.10) 0%, transparent 40%),
+    radial-gradient(circle at 88% 65%, rgba(217, 119, 6, 0.09) 0%, transparent 45%),
+    #090c13;
+}
+
+body[data-topic="rome"] .bg-letter {
+  font-family: var(--font-serif);
+  letter-spacing: 0.12em;
+}
+
+body[data-topic="rome"] .bg-letter-highlight {
+  background: linear-gradient(
+    135deg,
+    #b45309 0%,
+    #d97706 25%,
+    #f59e0b 55%,
+    #fbbf24 80%,
+    #f59e0b 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.28;
+  filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.45));
+}
+
+[data-theme="dark"] body[data-topic="rome"] .bg-letter-highlight {
+  opacity: 0.35;
+  filter: drop-shadow(0 0 55px rgba(245, 158, 11, 0.6)) drop-shadow(0 0 25px rgba(217, 119, 6, 0.5));
 }
 
 /* Respect Reduced Motion */
