@@ -12,6 +12,9 @@
     },
     "index.js": {
       "includeFiles": "views/**,data/**,public/**"
+    },
+    "src/app.js": {
+      "includeFiles": "views/**,data/**,public/**"
     }
   }
 }

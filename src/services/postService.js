@@ -15,7 +15,12 @@ class PostService {
 
   async loadPosts() {
     try {
-      const raw = await fs.readFile(DATA_FILE, 'utf-8');
+      let raw;
+      try {
+        raw = await fs.readFile(path.join(process.cwd(), 'data/posts.json'), 'utf-8');
+      } catch (e) {
+        raw = await fs.readFile(path.join(__dirname, '../../data/posts.json'), 'utf-8');
+      }
       this.postsCache = JSON.parse(raw);
       this.lastLoaded = Date.now();
       return this.postsCache;

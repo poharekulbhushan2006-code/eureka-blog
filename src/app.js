@@ -45,19 +45,22 @@ export function createApp() {
   app.use(inputSanitizer);
 
   // Static Assets (Cache-Control for performance)
-  const publicPath = process.env.VERCEL ? path.join(process.cwd(), 'public') : path.join(__dirname, '../public');
+  const publicPath = path.join(process.cwd(), 'public');
   app.use(express.static(publicPath, {
     maxAge: process.env.NODE_ENV === 'production' ? '7d' : '0',
     etag: true
   }));
+  app.use(express.static(path.join(__dirname, '../public')));
 
   // Global Locals
   app.locals.siteConfig = siteConfig;
 
   // View Engine Configuration
-  const viewsPath = process.env.VERCEL ? path.join(process.cwd(), 'views') : path.join(__dirname, '../views');
   app.set('view engine', 'ejs');
-  app.set('views', viewsPath);
+  app.set('views', [
+    path.join(process.cwd(), 'views'),
+    path.join(__dirname, '../views')
+  ]);
 
   // Application Routes
   app.use('/api', apiLimiter, apiRoutes);
@@ -69,3 +72,7 @@ export function createApp() {
 
   return app;
 }
+
+const app = createApp();
+export default app;
+
