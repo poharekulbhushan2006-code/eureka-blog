@@ -43,7 +43,7 @@
         <!-- Left: Grand Lead Essay -->
         <div class="broadsheet-lead-col">
           <% if (featured) { %>
-            <article class="lead-story-card">
+            <article class="lead-story-card reveal">
               <div class="lead-meta-row">
                 <span class="badge badge-accent"><%= featured.category %></span>
                 <span class="lead-meta-sep">•</span>
@@ -85,7 +85,7 @@
         <aside class="broadsheet-sidebar-col">
           
           <!-- OFFICIAL INSTAGRAM CHANNEL SHOWCASE CARD -->
-          <div class="instagram-showcase-card">
+          <div class="instagram-showcase-card reveal">
             <div class="ig-card-badge">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -132,7 +132,7 @@
           </div>
 
           <!-- Trending & Curated Inquiries -->
-          <div class="trending-panel">
+          <div class="trending-panel reveal">
             <div class="panel-section-title">
               <span>CURATED ESSAYS</span>
               <span class="panel-title-rule"></span>
@@ -160,7 +160,7 @@
   <!-- Dispatches Feed Section -->
   <section id="articles" class="dispatches-section">
     <div class="container">
-      <div class="dispatches-header-row">
+      <div class="dispatches-header-row reveal">
         <div>
           <h2 class="dispatches-heading">All Dispatches & Essays</h2>
           <p class="dispatches-sub">Peer-reviewed thinking on human psychology and daily decision systems.</p>
@@ -173,7 +173,7 @@
       <!-- Clean Editorial Dispatches Table/Feed -->
       <div class="editorial-dispatches-feed">
         <% posts.forEach((post, idx) => { %>
-          <article class="dispatch-item">
+          <article class="dispatch-item reveal" style="--item-idx: <%= idx %>">
             <div class="dispatch-date-col">
               <time class="dispatch-date" datetime="<%= post.publishedAt %>"><%= post.publishedAt %></time>
               <span class="badge"><%= post.category %></span>
@@ -218,7 +218,7 @@
       </div>
 
       <!-- Dignified Editorial Newsletter Dispatch Box -->
-      <div class="newsletter-editorial-box">
+      <div class="newsletter-editorial-box reveal">
         <div class="newsletter-inner">
           <div class="newsletter-text-col">
             <span class="newsletter-kicker">WEEKLY INTELLIGENCE DISPATCH</span>

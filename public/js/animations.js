@@ -1,21 +1,92 @@
 // ==========================================================================
-// EUREKA — Scroll Reveals & Reading Experience Animations
+// EUREKA — Editorial Scroll Reveals, Motion & Reading Experience Engine
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 0. Website Opening Intro Animation Controller
+  // ========================================================================
+  // 0. Website Opening Intro Animation Controller (Splash Screen)
+  // ========================================================================
   const introOverlay = document.getElementById('site-intro-overlay');
   if (introOverlay) {
     setTimeout(() => {
       introOverlay.classList.add('intro-hidden');
+      document.body.classList.add('page-loaded');
       setTimeout(() => {
         try { introOverlay.remove(); } catch (e) {}
-      }, 700);
+      }, 750);
     }, 1050);
+  } else {
+    document.body.classList.add('page-loaded');
   }
 
-  // 1. General page scroll reveal
-  if ('IntersectionObserver' in window) {
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  // ========================================================================
+  // 1. Article Reading Scroll-Reveal Observer (Premium Editorial Flow)
+  // ========================================================================
+  const articleProse = document.querySelector('.article-prose');
+  if (articleProse && 'IntersectionObserver' in window) {
+    // Automatically wrap any bare markdown tables in a responsive scroll container
+    const tables = articleProse.querySelectorAll('table');
+    tables.forEach(table => {
+      if (!table.parentElement.classList.contains('table-scroll-wrap')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-scroll-wrap reading-reveal';
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      }
+    });
+
+    // Select reading elements for smooth scroll reveal
+    // Target blocks, headings, quotes, infographic cards and grids
+    const readingElements = articleProse.querySelectorAll(
+      'h2, h3, p, blockquote, .attachment-cards-grid, .quantum-cards-grid, figure, .table-scroll-wrap, pre, .flowchart-container, .timeline-container, .timeline-item, hr'
+    );
+
+    const readingObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          readingObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.05
+    });
+
+    readingElements.forEach((el) => {
+      el.classList.add('reading-reveal');
+
+      // Check if already in viewport on load
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= windowHeight * 0.92) {
+        el.classList.add('is-revealed');
+      } else {
+        readingObserver.observe(el);
+      }
+    });
+
+    // Observe bottom elements (actions bar, IG banner, tags, related dispatches)
+    const bottomElements = document.querySelectorAll(
+      '.article-actions-bar, .article-ig-banner, .article-tags-row, .related-dispatches-section, .related-dispatch-card'
+    );
+    bottomElements.forEach(el => {
+      el.classList.add('reading-reveal');
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= windowHeight * 0.92) {
+        el.classList.add('is-revealed');
+      } else {
+        readingObserver.observe(el);
+      }
+    });
+  }
+
+  // ========================================================================
+  // 2. Home Page & General Page Scroll-Reveal Observer
+  // ========================================================================
+  const generalElements = document.querySelectorAll('.reveal');
+  if (generalElements.length > 0 && 'IntersectionObserver' in window) {
     const generalObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -23,66 +94,33 @@ document.addEventListener('DOMContentLoaded', () => {
           generalObserver.unobserve(entry.target);
         }
       });
-    }, { rootMargin: '0px 0px -40px 0px' });
+    }, {
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.05
+    });
 
-    document.querySelectorAll('.reveal').forEach(el => generalObserver.observe(el));
-
-    // 2. Reading Experience Scroll Reveal (Article Content)
-    const articleProse = document.querySelector('.article-prose');
-    if (articleProse) {
-      // Ensure all tables are wrapped in a responsive scroll container for all screen sizes
-      const tables = articleProse.querySelectorAll('table');
-      tables.forEach(table => {
-        if (!table.parentElement.classList.contains('table-scroll-wrap')) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'table-scroll-wrap';
-          table.parentNode.insertBefore(wrapper, table);
-          wrapper.appendChild(table);
-        }
-      });
-
-      // Automatically target key reading elements
-      const readingElements = articleProse.querySelectorAll(
-        'h2, h3, p, blockquote, figure, img, .table-scroll-wrap, pre, .flowchart-container, .timeline-container, .timeline-item'
-      );
-
-      const readingObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-revealed');
-            readingObserver.unobserve(entry.target);
-          }
-        });
-      }, {
-        rootMargin: '0px 0px -35px 0px',
-        threshold: 0.08
-      });
-
-      readingElements.forEach((el, idx) => {
-        el.classList.add('reading-reveal');
-        
-        // Stagger timeline items
-        if (el.classList.contains('timeline-item')) {
-          el.style.setProperty('--item-i', idx % 6);
-        }
-
-        readingObserver.observe(el);
-      });
-
-      // Also observe bottom action bar and related reading
-      const actionBars = document.querySelectorAll('.article-actions-bar, .article-container + section');
-      actionBars.forEach(el => {
-        el.classList.add('reading-reveal');
-        readingObserver.observe(el);
-      });
-    }
-  } else {
+    generalElements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= windowHeight * 0.92) {
+        el.classList.add('is-revealed');
+      } else {
+        generalObserver.observe(el);
+      }
+    });
+  } else if (!('IntersectionObserver' in window)) {
     // Fallback for older browsers
     document.querySelectorAll('.reveal, .reading-reveal').forEach(el => el.classList.add('is-revealed'));
   }
 
+  // Safety fallback: ensure no element remains accidentally hidden
+  setTimeout(() => {
+    document.querySelectorAll('.reading-reveal:not(.is-revealed), .reveal:not(.is-revealed)').forEach(el => {
+      el.classList.add('is-revealed');
+    });
+  }, 2500);
+
   // ========================================================================
-  // 3. Top Page-Loading Progress Bar (YouTube / GitHub Style)
+  // 3. Top Page-Loading Progress Bar (YouTube / GitHub / Medium Style)
   // ========================================================================
   const navLoader = document.getElementById('page-nav-loader');
   const navLoaderBar = navLoader ? navLoader.querySelector('.nav-loader-bar') : null;
@@ -155,5 +193,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-
-

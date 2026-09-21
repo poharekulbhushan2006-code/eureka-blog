@@ -170,7 +170,7 @@
 
 
       <!-- Instagram Callout Banner -->
-      <div class="article-ig-banner">
+      <div class="article-ig-banner reading-reveal">
         <div class="article-ig-banner-inner">
           <div class="article-ig-icon-wrap">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -191,7 +191,7 @@
 
       <!-- Tags -->
       <% if (post.tags && post.tags.length > 0) { %>
-        <div class="article-tags-row">
+        <div class="article-tags-row reading-reveal">
           <span class="tags-label">INDEXED TOPICS:</span>
           <% post.tags.forEach(tag => { %>
             <a href="/tag/<%= encodeURIComponent(tag) %>" class="badge">#<%= tag %></a>
@@ -204,7 +204,7 @@
 
   <!-- Related Reading Section -->
   <% if (related && related.length > 0) { %>
-    <section class="related-dispatches-section">
+    <section class="related-dispatches-section reveal">
       <div class="container" style="max-width: 900px;">
         <div class="related-section-header">
           <h3 class="related-section-title">Further Inquiries & Dispatches</h3>
@@ -213,7 +213,7 @@
 
         <div class="related-dispatches-grid">
           <% related.forEach(rel => { %>
-            <a href="/post/<%= rel.slug %>" class="related-dispatch-card">
+            <a href="/post/<%= rel.slug %>" class="related-dispatch-card reveal">
               <span class="badge badge-accent" style="align-self: flex-start; margin-bottom: 8px;"><%= rel.category %></span>
               <h4 class="related-dispatch-title"><%= rel.title %></h4>
               <% if (rel.subtitle) { %>
