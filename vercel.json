@@ -9,6 +9,9 @@
   "functions": {
     "api/index.js": {
       "includeFiles": "views/**,data/**,public/**"
+    },
+    "index.js": {
+      "includeFiles": "views/**,data/**,public/**"
     }
   }
 }

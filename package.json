@@ -2,7 +2,7 @@
   "name": "eureka-blog",
   "version": "1.0.0",
   "description": "Eureka Blog - Modern Swiss Modernism 2.0 Editorial Tech Journal & Platform",
-  "main": "src/server.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
