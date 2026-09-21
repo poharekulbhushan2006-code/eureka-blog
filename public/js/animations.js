@@ -3,6 +3,17 @@
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 0. Website Opening Intro Animation Controller
+  const introOverlay = document.getElementById('site-intro-overlay');
+  if (introOverlay) {
+    setTimeout(() => {
+      introOverlay.classList.add('intro-hidden');
+      setTimeout(() => {
+        try { introOverlay.remove(); } catch (e) {}
+      }, 700);
+    }, 1050);
+  }
+
   // 1. General page scroll reveal
   if ('IntersectionObserver' in window) {
     const generalObserver = new IntersectionObserver((entries) => {

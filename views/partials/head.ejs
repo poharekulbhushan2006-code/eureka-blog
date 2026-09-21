@@ -50,9 +50,51 @@
   </script>
 </head>
 <body data-page="<%= typeof pageType !== 'undefined' ? pageType : 'default' %>" data-topic="<%= typeof topic !== 'undefined' ? topic : 'default' %>">
+  <!-- Top Navigation & Page Loading Bar -->
+  <div id="page-nav-loader" class="page-nav-loader" aria-hidden="true">
+    <div class="nav-loader-bar"></div>
+  </div>
+
   <!-- Reading Progress Bar -->
   <div id="reading-progress-container">
     <div id="reading-progress-bar"></div>
+  </div>
+
+  <!-- Website Opening Intro Animation (Smooth Splash Reveal) -->
+  <div id="site-intro-overlay" class="site-intro-overlay" aria-hidden="true">
+    <div class="intro-content">
+      <div class="intro-logo-mark">
+        <svg width="56" height="56" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="var(--color-primary)" />
+          <path d="M9 8.5H23M9 16H19.5M9 23.5H23" stroke="var(--color-background)" stroke-width="2.6" stroke-linecap="square" />
+          <circle cx="23" cy="16" r="2" fill="var(--color-accent)" />
+        </svg>
+      </div>
+      <div class="intro-brand">
+        <span class="intro-letter" style="--i: 0">E</span>
+        <span class="intro-letter" style="--i: 1">U</span>
+        <span class="intro-letter" style="--i: 2">R</span>
+        <span class="intro-letter" style="--i: 3">E</span>
+        <span class="intro-letter intro-highlight" style="--i: 4">K</span>
+        <span class="intro-letter intro-highlight" style="--i: 5">A</span>
+      </div>
+      <p class="intro-tagline">Understanding how we think, feel, and behave.</p>
+      <div class="intro-loader-line">
+        <div class="intro-loader-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ambient EUREKA Background Kinetic Watermark -->
+  <div id="eureka-ambient-bg" class="eureka-ambient-bg" aria-hidden="true">
+    <div class="eureka-bg-letters">
+      <span class="bg-letter" style="--i: 0">E</span>
+      <span class="bg-letter" style="--i: 1">U</span>
+      <span class="bg-letter" style="--i: 2">R</span>
+      <span class="bg-letter" style="--i: 3">E</span>
+      <span class="bg-letter bg-letter-highlight" style="--i: 4">K</span>
+      <span class="bg-letter bg-letter-highlight" style="--i: 5">A</span>
+    </div>
   </div>
 
   <%- include('header') %>
