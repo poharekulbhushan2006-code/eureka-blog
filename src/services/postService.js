@@ -13,13 +13,30 @@ class PostService {
     this.lastLoaded = 0;
   }
 
+  async savePostsToFile(posts) {
+    try {
+      await fs.writeFile(DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
+    } catch (err) {
+      // On Vercel serverless, root is read-only. Fallback to /tmp
+      try {
+        await fs.writeFile('/tmp/posts.json', JSON.stringify(posts, null, 2), 'utf-8');
+      } catch (tmpErr) {
+        // In-memory cache is already updated
+      }
+    }
+  }
+
   async loadPosts() {
     try {
       let raw;
       try {
-        raw = await fs.readFile(path.join(process.cwd(), 'data/posts.json'), 'utf-8');
-      } catch (e) {
-        raw = await fs.readFile(path.join(__dirname, '../../data/posts.json'), 'utf-8');
+        raw = await fs.readFile('/tmp/posts.json', 'utf-8');
+      } catch {
+        try {
+          raw = await fs.readFile(path.join(process.cwd(), 'data/posts.json'), 'utf-8');
+        } catch (e) {
+          raw = await fs.readFile(path.join(__dirname, '../../data/posts.json'), 'utf-8');
+        }
       }
       this.postsCache = JSON.parse(raw);
       this.lastLoaded = Date.now();
@@ -50,18 +67,21 @@ class PostService {
       // 1. Strip dangerous executable tags completely
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+      .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
       .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
       .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
       .replace(/<applet\b[^<]*(?:(?!<\/applet>)<[^<]*)*<\/applet>/gi, '')
       .replace(/<meta\b[^>]*>/gi, '')
       .replace(/<base\b[^>]*>/gi, '')
-      // 2. Strip dangerous inline event handlers (onerror, onclick, onload, etc.)
-      .replace(/\s+on[a-z]+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, '')
-      // 3. Neutralize javascript: and vbscript: URIs in href and src
+      .replace(/<form\b[^<]*(?:(?!<\/form>)<[^<]*)*<\/form>/gi, '')
+      // 2. Strip dangerous inline event handlers (onerror, onclick, onload, onmouseover, etc.)
+      .replace(/\s+on[a-z0-9_-]+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, '')
+      // 3. Neutralize dangerous scheme URIs
       .replace(/href\s*=\s*(?:'javascript:[^']*'|"javascript:[^"]*"|javascript:[^\s>]+)/gi, 'href="#"')
       .replace(/src\s*=\s*(?:'javascript:[^']*'|"javascript:[^"]*"|javascript:[^\s>]+)/gi, 'src=""')
       .replace(/href\s*=\s*(?:'vbscript:[^']*'|"vbscript:[^"]*"|vbscript:[^\s>]+)/gi, 'href="#"')
-      .replace(/src\s*=\s*(?:'vbscript:[^']*'|"vbscript:[^"]*"|vbscript:[^\s>]+)/gi, 'src=""');
+      .replace(/src\s*=\s*(?:'vbscript:[^']*'|"vbscript:[^"]*"|vbscript:[^\s>]+)/gi, 'src=""')
+      .replace(/(?:href|src)\s*=\s*(?:'data:text\/html[^']*'|"data:text\/html[^"]*"|data:text\/html[^\s>]+)/gi, 'href="#"');
   }
 
   extractHeadingsAndHtml(markdown) {
@@ -231,7 +251,7 @@ class PostService {
     };
 
     posts.unshift(newPost);
-    await fs.writeFile(DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
+    await this.savePostsToFile(posts);
     this.postsCache = posts;
     this.lastLoaded = Date.now();
     return newPost;
@@ -242,7 +262,7 @@ class PostService {
     const post = posts.find(p => p.slug === slug);
     if (!post) return null;
     post.claps = (post.claps || 0) + 1;
-    await fs.writeFile(DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
+    await this.savePostsToFile(posts);
     return post.claps;
   }
 

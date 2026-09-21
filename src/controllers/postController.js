@@ -276,5 +276,39 @@ export const postController = {
       topic: 'default',
       activePath: '/thank-you'
     });
+  },
+
+  async getFeed(req, res, next) {
+    try {
+      const posts = await postService.getPosts();
+      const siteUrl = 'https://eureka-blog.vercel.app';
+      const items = (posts || []).map(p => `
+    <item>
+      <title><![CDATA[${p.title}]]></title>
+      <link>${siteUrl}/post/${p.slug}</link>
+      <guid isPermaLink="true">${siteUrl}/post/${p.slug}</guid>
+      <description><![CDATA[${p.excerpt || p.subtitle || ''}]]></description>
+      <category><![CDATA[${p.category}]]></category>
+      <pubDate>${new Date(p.publishedAt || Date.now()).toUTCString()}</pubDate>
+    </item>`).join('');
+
+      const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title><![CDATA[${siteConfig.name} — ${siteConfig.tagline}]]></title>
+    <link>${siteUrl}</link>
+    <description><![CDATA[${siteConfig.description}]]></description>
+    <language>en</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml"/>
+    ${items}
+  </channel>
+</rss>`;
+
+      res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+      res.send(rssXml);
+    } catch (err) {
+      next(err);
+    }
   }
 };

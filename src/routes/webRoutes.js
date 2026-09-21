@@ -8,6 +8,8 @@ export const webRoutes = Router();
 // Editorial & Reader Routes
 webRoutes.get('/', postController.getHome);
 webRoutes.get('/sitemap.xml', postController.getSitemap);
+webRoutes.get('/rss.xml', postController.getFeed);
+webRoutes.get('/feed.xml', postController.getFeed);
 webRoutes.get('/privacy', postController.getPrivacy);
 webRoutes.get('/terms', postController.getTerms);
 webRoutes.get('/contact', postController.getContact);

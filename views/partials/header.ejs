@@ -62,6 +62,67 @@
         </svg>
         <span class="nav-action-text">Write</span>
       </a>
+
+      <!-- Mobile Hamburger Menu Button -->
+      <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- Mobile Navigation Drawer -->
+<div id="mobile-nav-overlay" class="mobile-nav-overlay" aria-hidden="true"></div>
+<aside id="mobile-nav-drawer" class="mobile-nav-drawer" aria-label="Mobile Navigation" aria-hidden="true">
+  <div class="mobile-drawer-header">
+    <div class="brand-text-group">
+      <span class="brand-title" style="font-size: 1.1rem;">EURE<span class="brand-highlight">KA</span></span>
+      <span class="brand-sub" style="font-size: 0.55rem;">JOURNAL OF IDEAS</span>
+    </div>
+    <button id="mobile-nav-close" class="mobile-nav-close-btn" aria-label="Close navigation menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <div class="mobile-drawer-body">
+    <div class="mobile-nav-section-title">Navigation</div>
+    <ul class="mobile-nav-list">
+      <li><a href="/" class="mobile-nav-item <%= activePath === '/' ? 'active' : '' %>">Front Page</a></li>
+      <li><a href="/about" class="mobile-nav-item <%= activePath === '/about' ? 'active' : '' %>">About EUREKA</a></li>
+      <li><a href="/editor" class="mobile-nav-item <%= activePath === '/editor' ? 'active' : '' %>">Author Studio</a></li>
+      <li><a href="/contact" class="mobile-nav-item <%= activePath === '/contact' ? 'active' : '' %>">Editorial Desk & Contact</a></li>
+      <li><a href="/rss.xml" class="mobile-nav-item" target="_blank" rel="noopener">RSS Feed</a></li>
+    </ul>
+
+    <% if (siteConfig.categories && siteConfig.categories.length > 0) { %>
+      <div class="mobile-nav-section-title" style="margin-top: 1.5rem;">Explore Topics</div>
+      <ul class="mobile-nav-list">
+        <% siteConfig.categories.forEach(cat => { %>
+          <li>
+            <a href="/category/<%= encodeURIComponent(cat.slug) %>" class="mobile-nav-item <%= activePath === '/category/' + cat.slug ? 'active' : '' %>">
+              <span class="mobile-cat-dot" style="background-color: <%= cat.color || 'var(--color-accent)' %>;"></span>
+              <%= cat.name %>
+            </a>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+  <div class="mobile-drawer-footer">
+    <div style="font-size: var(--text-xs); color: var(--color-muted-foreground); margin-bottom: 8px;">
+      Engineered by <strong><%= siteConfig.engineeredBy %></strong><br>
+      Researched by <strong><%= siteConfig.researchedAndWrittenBy %></strong>
+    </div>
+    <div style="font-size: 0.7rem; color: var(--color-muted-foreground);">
+      © 2026 EUREKA. All rights reserved.
+    </div>
+  </div>
+</aside>

@@ -59,13 +59,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (readingTimeSpan) readingTimeSpan.textContent = `${minutes} min read`;
   }
 
+  const draftStatusPill = document.getElementById('draft-status-pill');
+  const clearDraftBtn = document.getElementById('clear-draft-btn');
+  let saveTimer = null;
+
   function updatePreview() {
     preview.innerHTML = renderMarkdown(textarea.value);
     updateStats();
 
-    // Auto-save draft
-    localStorage.setItem('eureka-draft-title', titleInput ? titleInput.value : '');
-    localStorage.setItem('eureka-draft-content', textarea.value);
+    if (draftStatusPill) draftStatusPill.textContent = 'Saving...';
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      localStorage.setItem('eureka-draft-title', titleInput ? titleInput.value : '');
+      localStorage.setItem('eureka-draft-content', textarea.value);
+      if (draftStatusPill) draftStatusPill.textContent = 'Draft saved';
+    }, 400);
   }
 
   // Restore draft if empty
@@ -76,6 +84,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (titleInput && savedTitle && !titleInput.value) {
       titleInput.value = savedTitle;
     }
+  }
+
+  // Clear Draft
+  if (clearDraftBtn) {
+    clearDraftBtn.addEventListener('click', () => {
+      if (confirm('Clear current draft?')) {
+        textarea.value = '';
+        if (titleInput) titleInput.value = '';
+        localStorage.removeItem('eureka-draft-content');
+        localStorage.removeItem('eureka-draft-title');
+        updatePreview();
+        if (draftStatusPill) draftStatusPill.textContent = 'Draft cleared';
+      }
+    });
   }
 
   textarea.addEventListener('input', updatePreview);

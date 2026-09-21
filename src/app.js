@@ -6,7 +6,7 @@ import compression from 'compression';
 import cors from 'cors';
 import { requestLogger } from './middleware/requestLogger.js';
 import { notFoundHandler, globalErrorHandler } from './middleware/errorHandler.js';
-import { globalLimiter, apiLimiter, inputSanitizer, securityHeaders } from './middleware/security.js';
+import { globalLimiter, apiLimiter, inputSanitizer, securityHeaders, csrfProtection } from './middleware/security.js';
 import { siteConfig } from './config/site.js';
 import { webRoutes } from './routes/webRoutes.js';
 import { apiRoutes } from './routes/apiRoutes.js';
@@ -43,6 +43,7 @@ export function createApp() {
   app.use(express.urlencoded({ extended: true, limit: '2mb' }));
   app.use(express.json({ limit: '2mb' }));
   app.use(inputSanitizer);
+  app.use(csrfProtection);
 
   // Static Assets (Cache-Control for performance)
   const publicPath = path.join(process.cwd(), 'public');

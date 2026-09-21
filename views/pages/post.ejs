@@ -61,6 +61,26 @@
     <% } %>
 
     <div class="article-container">
+      <!-- Reader Display Controls Bar -->
+      <div id="reader-controls-bar" class="reader-controls-bar">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="color: var(--color-muted-foreground); font-weight: 600;">Text Size:</span>
+          <div class="reader-btn-group">
+            <button type="button" class="reader-control-btn" data-font-size="sm" title="Small Text">A-</button>
+            <button type="button" class="reader-control-btn active" data-font-size="md" title="Standard Text">A</button>
+            <button type="button" class="reader-control-btn" data-font-size="lg" title="Large Text">A+</button>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="color: var(--color-muted-foreground); font-weight: 600;">Typography:</span>
+          <div class="reader-btn-group">
+            <button type="button" class="reader-control-btn active" data-font-family="serif" title="Serif Editorial Typography">Serif</button>
+            <button type="button" class="reader-control-btn" data-font-family="sans" title="Sans Modern Typography">Sans</button>
+          </div>
+        </div>
+      </div>
+
       <article class="article-prose">
         <%- post.renderedHtml %>
       </article>

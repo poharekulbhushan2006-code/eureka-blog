@@ -1,39 +1,22 @@
 // ==========================================================================
 // EUREKA — Security Middleware (Full-Stack Protection)
-// Rate Limiting, Input Sanitization, Security Headers & Editorial Auth
+// Rate Limiting, Input Sanitization, Security Headers, CSRF & Editorial Auth
 // ==========================================================================
 
-// 1. Serverless-safe Rate Limiter
-// Uses in-memory Map on long-running servers (local dev).
-// On Vercel serverless, functions are stateless per-request so persistent
-// rate limiting is not feasible — Vercel's edge network handles DDoS protection.
-const IS_SERVERLESS = !!process.env.VERCEL;
+import crypto from 'crypto';
 
+// 1. Serverless-safe Sliding Window Rate Limiter (No setInterval)
+// Uses in-memory Map with lazy cleanup on request, safe for both local dev and serverless warm containers.
 class SlidingWindowRateLimiter {
   constructor(windowMs, maxRequests, message = 'Too many requests, please try again later.') {
     this.windowMs = windowMs;
     this.maxRequests = maxRequests;
     this.message = message;
-    if (!IS_SERVERLESS) {
-      this.hits = new Map();
-      // Only run cleanup interval on persistent (non-serverless) servers
-      const timer = setInterval(() => {
-        const now = Date.now();
-        for (const [ip, record] of this.hits.entries()) {
-          if (now - record.startTime > this.windowMs) {
-            this.hits.delete(ip);
-          }
-        }
-      }, 5 * 60 * 1000);
-      if (timer.unref) timer.unref();
-    }
+    this.hits = new Map();
   }
 
   middleware() {
     return (req, res, next) => {
-      // On serverless: skip rate limiting (Vercel edge handles it)
-      if (IS_SERVERLESS) return next();
-
       let ip = req.ip;
       if (!ip && req.headers['x-forwarded-for']) {
         const forwarded = req.headers['x-forwarded-for'];
@@ -41,6 +24,15 @@ class SlidingWindowRateLimiter {
       }
       if (!ip) ip = req.socket?.remoteAddress || 'unknown';
       const now = Date.now();
+
+      // Lazy cleanup: prune stale entries periodically without using timers
+      if (this.hits.size > 500) {
+        for (const [key, rec] of this.hits.entries()) {
+          if (now - rec.startTime > this.windowMs) {
+            this.hits.delete(key);
+          }
+        }
+      }
 
       let record = this.hits.get(ip);
       if (!record || now - record.startTime > this.windowMs) {
@@ -70,13 +62,12 @@ class SlidingWindowRateLimiter {
 // Instantiate limiters
 export const globalLimiter = new SlidingWindowRateLimiter(60 * 1000, 150, 'Global rate limit exceeded. Please slow down.').middleware();
 export const apiLimiter = new SlidingWindowRateLimiter(60 * 1000, 60, 'API rate limit exceeded. Please try again in a minute.').middleware();
-export const formLimiter = new SlidingWindowRateLimiter(15 * 60 * 1000, 8, 'Too many form submissions from this IP. Please wait 15 minutes.').middleware();
-export const editorLimiter = new SlidingWindowRateLimiter(60 * 60 * 1000, 20, 'Publishing limit reached. Please wait before saving more dispatches.').middleware();
+export const formLimiter = new SlidingWindowRateLimiter(15 * 60 * 1000, 10, 'Too many form submissions from this IP. Please wait a few minutes.').middleware();
+export const editorLimiter = new SlidingWindowRateLimiter(60 * 60 * 1000, 25, 'Publishing limit reached. Please wait before saving more dispatches.').middleware();
 
 // 2. Input Sanitization Middleware (XSS & Prototype Pollution Prevention)
 function sanitizeValue(value) {
   if (typeof value === 'string') {
-    // Strip dangerous tags and JS event handlers while preserving safe text
     return value
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/javascript\s*:/gi, '')
@@ -89,7 +80,6 @@ function sanitizeValue(value) {
   if (value !== null && typeof value === 'object') {
     const clean = {};
     for (const [k, v] of Object.entries(value)) {
-      // Prevent prototype pollution attacks
       if (k === '__proto__' || k === 'constructor' || k === 'prototype') {
         continue;
       }
@@ -115,24 +105,18 @@ export function inputSanitizer(req, res, next) {
 
 // 3. Security Headers Enhancement
 export function securityHeaders(req, res, next) {
-  // Prevent clickjacking
   res.setHeader('X-Frame-Options', 'DENY');
-  // Prevent MIME type sniffing
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  // Control referrer information
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  // Restrict sensitive browser features
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
-  // Enforce HSTS (1 year)
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-  // Content Security Policy (allows Google Fonts, Unsplash images, local scripts/styles)
   res.setHeader(
     'Content-Security-Policy',
     "default-src 'self'; " +
     "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "font-src 'self' https://fonts.gstatic.com data:; " +
-    "img-src 'self' data: https://images.unsplash.com; " +
+    "img-src 'self' data: https://images.unsplash.com https://*.unsplash.com; " +
     "connect-src 'self'; " +
     "object-src 'none'; " +
     "frame-ancestors 'none'; " +
@@ -143,14 +127,53 @@ export function securityHeaders(req, res, next) {
   next();
 }
 
-// 4. Editorial Access Control (Protects /editor and POST /api/posts for owner & writers)
+// 4. CSRF / Origin Verification Middleware
+export function csrfProtection(req, res, next) {
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+    const origin = req.headers['origin'];
+    const host = req.headers['host'];
+    if (origin && host) {
+      try {
+        const originHost = new URL(origin).host;
+        const isLocal = originHost.includes('localhost') || originHost.includes('127.0.0.1');
+        const isVercel = originHost.endsWith('.vercel.app') || originHost === 'eureka-blog.vercel.app';
+        const isSameHost = originHost === host;
+
+        if (!isSameHost && !isLocal && !isVercel) {
+          const isJson = req.xhr || req.headers.accept?.includes('json') || req.originalUrl.startsWith('/api');
+          if (isJson) {
+            return res.status(403).json({ success: false, error: 'Forbidden: Origin validation failed.' });
+          }
+          return res.status(403).send('Forbidden: Request origin not allowed.');
+        }
+      } catch {
+        return res.status(403).json({ success: false, error: 'Malformed Origin.' });
+      }
+    }
+  }
+  next();
+}
+
+// 5. Constant-time Safe String Comparison
+function safeEqual(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false;
+  const bufA = Buffer.from(a, 'utf-8');
+  const bufB = Buffer.from(b, 'utf-8');
+  if (bufA.length !== bufB.length) {
+    crypto.timingSafeEqual(bufA, bufA);
+    return false;
+  }
+  return crypto.timingSafeEqual(bufA, bufB);
+}
+
+// 6. Editorial Access Control (Protects /editor and POST /api/posts for owner & writers)
 export function editorialAuth(req, res, next) {
   const editorialSecret = process.env.EUREKA_EDITORIAL_KEY || 'eureka-editorial-2026';
   const clientToken = req.headers['x-editorial-key'] || req.query.key || (req.body && req.body.editorialKey);
   const isJson = req.xhr || req.headers.accept?.includes('json') || req.originalUrl.startsWith('/api');
 
   // Verify key if provided
-  if (clientToken && clientToken !== editorialSecret) {
+  if (clientToken && !safeEqual(clientToken, editorialSecret)) {
     if (isJson) {
       return res.status(403).json({
         success: false,
@@ -173,7 +196,7 @@ export function editorialAuth(req, res, next) {
     if (isJson) {
       return res.status(401).json({
         success: false,
-        error: 'Authentication required. Please supply X-Editorial-Key.'
+        error: 'Authentication required. Please supply X-Editorial-Key or editorialKey.'
       });
     }
     return res.status(401).render('pages/editor', {

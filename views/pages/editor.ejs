@@ -15,12 +15,20 @@
 
         <div class="editor-actions">
           <div class="editor-stats">
+            <span id="draft-status-pill" style="color: var(--color-accent); font-size: 0.75rem; font-weight: 600;">Draft saved</span>
+            <span>•</span>
             <span id="word-count">0 words</span>
             <span>•</span>
             <span id="reading-time">1 min read</span>
           </div>
 
-          <div style="display: flex; align-items: center; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+            <a href="/api/posts/export" class="reader-control-btn" title="Download posts.json database backup" download style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px; height: 34px; padding: 0 10px;">
+              <span>💾 Backup JSON</span>
+            </a>
+            <button type="button" id="clear-draft-btn" class="reader-control-btn" title="Clear saved draft" style="height: 34px; padding: 0 8px;">
+              <span>Clear</span>
+            </button>
             <input 
               type="password" 
               name="editorialKey" 
