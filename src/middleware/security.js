@@ -166,9 +166,20 @@ function safeEqual(a, b) {
   return crypto.timingSafeEqual(bufA, bufB);
 }
 
+// Runtime secret generation: NEVER allow default fallback in production
+let runtimeSecret = process.env.EUREKA_EDITORIAL_KEY;
+if (!runtimeSecret) {
+  if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+    runtimeSecret = crypto.randomBytes(32).toString('hex');
+    console.warn('SECURITY WARNING: EUREKA_EDITORIAL_KEY environment variable is not configured. An ephemeral secret has been generated to protect the studio.');
+  } else {
+    runtimeSecret = 'eureka-editorial-2026';
+  }
+}
+
 // 6. Editorial Access Control (Protects /editor and POST /api/posts for owner & writers)
 export function editorialAuth(req, res, next) {
-  const editorialSecret = process.env.EUREKA_EDITORIAL_KEY || 'eureka-editorial-2026';
+  const editorialSecret = runtimeSecret;
   const clientToken = req.headers['x-editorial-key'] || req.query.key || (req.body && req.body.editorialKey);
   const isJson = req.xhr || req.headers.accept?.includes('json') || req.originalUrl.startsWith('/api');
 

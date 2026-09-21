@@ -13,7 +13,7 @@ export function globalErrorHandler(err, req, res, next) {
   console.error('Unhandled Application Error:', err);
 
   const status = err.status || 500;
-  const isDev = process.env.NODE_ENV !== 'production';
+  const isDev = process.env.NODE_ENV === 'development' && !process.env.VERCEL;
 
   if (req.xhr || req.headers.accept?.includes('json')) {
     return res.status(status).json({

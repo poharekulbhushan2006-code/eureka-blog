@@ -31,7 +31,26 @@ export function createApp() {
   }));
   app.use(securityHeaders);
   app.use(compression());
-  app.use(cors());
+  
+  // Restrict CORS to authorized origins
+  const allowedOrigins = [
+    'https://eureka-blog.vercel.app',
+    'https://eureka-journal.org'
+  ];
+  app.use(cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const isLocal = origin.includes('localhost') || origin.includes('127.0.0.1');
+      const isAllowed = allowedOrigins.includes(origin) || origin.endsWith('.vercel.app');
+      if (isAllowed || isLocal) {
+        return callback(null, true);
+      }
+      return callback(new Error('Blocked by CORS policy'));
+    },
+    methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],
+    credentials: true,
+    maxAge: 86400
+  }));
 
   // Global Rate Limiting
   app.use(globalLimiter);
