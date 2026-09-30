@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Helper: Update 3D Parallax on EUREKA background watermark
   const updateTypographyParallax = () => {
-    if (!bgLettersContainer) return;
+    if (!bgLettersContainer || !bgLettersContainer.style || !tilt) return;
 
     tilt.currRotX += (tilt.targetRotX - tilt.currRotX) * 0.05;
     tilt.currRotY += (tilt.targetRotY - tilt.currRotY) * 0.05;

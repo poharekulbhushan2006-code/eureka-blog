@@ -1,8 +1,5 @@
 <%- include('../partials/head') %>
 
-<!-- Link Article Styles -->
-<link rel="stylesheet" href="/css/article.css">
-
 <main class="article-page-main">
   <!-- Authoritative Left-Aligned Editorial Article Header -->
   <header class="article-header">
@@ -104,21 +101,21 @@
     <div class="article-container">
       
       <!-- Reader Display Controls Bar -->
-      <div id="reader-controls-bar" class="reader-controls-bar">
+      <div id="reader-controls-bar" class="reader-controls-bar" role="toolbar" aria-label="Reading display preferences">
         <div class="reader-control-group">
           <span class="reader-control-label">Type Size</span>
-          <div class="reader-btn-group">
-            <button type="button" class="reader-control-btn" data-font-size="sm" title="Compact (16px)">A-</button>
-            <button type="button" class="reader-control-btn active" data-font-size="md" title="Default (18px)">A</button>
-            <button type="button" class="reader-control-btn" data-font-size="lg" title="Large (20px)">A+</button>
+          <div class="reader-btn-group" role="group" aria-label="Font size selection">
+            <button type="button" class="reader-control-btn" data-font-size="sm" title="Compact size (16px)" aria-label="Small font size" aria-pressed="false">A-</button>
+            <button type="button" class="reader-control-btn active" data-font-size="md" title="Default reading size (18px)" aria-label="Default font size" aria-pressed="true">A</button>
+            <button type="button" class="reader-control-btn" data-font-size="lg" title="Large size (21px)" aria-label="Large font size" aria-pressed="false">A+</button>
           </div>
         </div>
 
         <div class="reader-control-group">
           <span class="reader-control-label">Typography</span>
-          <div class="reader-btn-group">
-            <button type="button" class="reader-control-btn active" data-font-family="serif" title="Newsreader Serif">Serif</button>
-            <button type="button" class="reader-control-btn" data-font-family="sans" title="Modern Sans">Sans</button>
+          <div class="reader-btn-group" role="group" aria-label="Font family selection">
+            <button type="button" class="reader-control-btn active" data-font-family="serif" title="Editorial Newsreader Serif" aria-label="Serif typography" aria-pressed="true">Serif</button>
+            <button type="button" class="reader-control-btn" data-font-family="sans" title="Modern Plus Jakarta Sans" aria-label="Sans-serif typography" aria-pressed="false">Sans</button>
           </div>
         </div>
       </div>
@@ -127,6 +124,20 @@
       <article class="article-prose" id="article-prose-content">
         <%- post.renderedHtml %>
       </article>
+      <script>
+        (function() {
+          try {
+            var prefs = JSON.parse(localStorage.getItem('eureka-reader-prefs') || '{}');
+            var s = (prefs.size === 'sm' || prefs.size === 'lg') ? prefs.size : 'md';
+            var f = (prefs.font === 'sans') ? 'sans' : 'serif';
+            var art = document.getElementById('article-prose-content');
+            if (art) {
+              art.classList.add('font-' + s);
+              art.classList.add('font-' + f + '-mode');
+            }
+          } catch (e) {}
+        })();
+      </script>
 
       <!-- Clean, Professional SVG Action Bar -->
       <div class="article-actions-bar">

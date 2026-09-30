@@ -399,64 +399,121 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ========================================================================
-  // 7. Share / Copy Link Handler
+  // 7. Share / Copy Link Handler (Desktop & Mobile Bar)
   // ========================================================================
   const shareBtn = document.getElementById('share-btn');
-  if (shareBtn) {
-    shareBtn.addEventListener('click', async () => {
-      const url = window.location.href;
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: document.title,
-            url: url
-          });
-          return;
-        } catch {}
-      }
+  const mobileShareBtn = document.getElementById('mobile-share-trigger');
 
-      if (navigator.clipboard) {
+  async function handleShareAction() {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: document.title,
+          url: url
+        });
+        return;
+      } catch (err) {
+        // User cancelled or share dismissed
+        if (err.name === 'AbortError') return;
+      }
+    }
+
+    if (navigator.clipboard) {
+      try {
         await navigator.clipboard.writeText(url);
         showToast('Link copied to clipboard');
-      } else {
-        showToast(`Article URL: ${url}`);
-      }
-    });
+        return;
+      } catch (err) {}
+    }
+
+    // Fallback prompt
+    showToast(`Article URL: ${url}`);
   }
+
+  if (shareBtn) shareBtn.addEventListener('click', handleShareAction);
+  if (mobileShareBtn) mobileShareBtn.addEventListener('click', handleShareAction);
 
   // ========================================================================
   // 8. Reader Display Preferences (Font Size & Typography Switcher)
   // ========================================================================
   const readerBar = document.getElementById('reader-controls-bar');
-  if (articleContent && readerBar) {
-    const savedPrefs = JSON.parse(localStorage.getItem('eureka-reader-prefs') || '{}');
-    const size = savedPrefs.size || 'md';
-    const font = savedPrefs.font || 'serif';
+  const articleProse = document.getElementById('article-prose-content');
 
-    articleContent.classList.add(`font-${size}`);
-    articleContent.classList.add(`font-${font}-mode`);
+  if (articleProse && readerBar) {
+    let savedPrefs = {};
+    try {
+      savedPrefs = JSON.parse(localStorage.getItem('eureka-reader-prefs') || '{}');
+    } catch (e) {
+      savedPrefs = {};
+    }
 
-    readerBar.querySelectorAll('[data-font-size]').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.fontSize === size);
-      btn.addEventListener('click', () => {
-        articleContent.classList.remove('font-sm', 'font-md', 'font-lg');
-        articleContent.classList.add(`font-${btn.dataset.fontSize}`);
-        readerBar.querySelectorAll('[data-font-size]').forEach(b => b.classList.remove('active'));
+    const validSizes = ['sm', 'md', 'lg'];
+    const validFonts = ['serif', 'sans'];
+    const currentSize = validSizes.includes(savedPrefs.size) ? savedPrefs.size : 'md';
+    const currentFont = validFonts.includes(savedPrefs.font) ? savedPrefs.font : 'serif';
+
+    // Synchronize initial article prose classes
+    articleProse.classList.remove('font-sm', 'font-md', 'font-lg');
+    articleProse.classList.remove('font-serif-mode', 'font-sans-mode');
+    articleProse.classList.add(`font-${currentSize}`);
+    articleProse.classList.add(`font-${currentFont}-mode`);
+
+    // Wire up Type Size (A-, A, A+) buttons
+    const sizeButtons = readerBar.querySelectorAll('[data-font-size]');
+    sizeButtons.forEach(btn => {
+      const isInitialActive = btn.dataset.fontSize === currentSize;
+      btn.classList.toggle('active', isInitialActive);
+      btn.setAttribute('aria-pressed', isInitialActive ? 'true' : 'false');
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const selectedSize = btn.dataset.fontSize;
+        if (!validSizes.includes(selectedSize)) return;
+
+        articleProse.classList.remove('font-sm', 'font-md', 'font-lg');
+        articleProse.classList.add(`font-${selectedSize}`);
+
+        sizeButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         btn.classList.add('active');
-        savedPrefs.size = btn.dataset.fontSize;
-        localStorage.setItem('eureka-reader-prefs', JSON.stringify(savedPrefs));
+        btn.setAttribute('aria-pressed', 'true');
+
+        savedPrefs.size = selectedSize;
+        try {
+          localStorage.setItem('eureka-reader-prefs', JSON.stringify(savedPrefs));
+        } catch (err) {}
       });
     });
 
-    readerBar.querySelectorAll('[data-font-family]').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.fontFamily === font);
-      btn.addEventListener('click', () => {
-        articleContent.classList.remove('font-serif-mode', 'font-sans-mode');
-        articleContent.classList.add(`font-${btn.dataset.fontFamily}-mode`);
-        readerBar.querySelectorAll('[data-font-family]').forEach(b => b.classList.remove('active'));
+    // Wire up Typography (Serif vs Sans) buttons
+    const fontButtons = readerBar.querySelectorAll('[data-font-family]');
+    fontButtons.forEach(btn => {
+      const isInitialActive = btn.dataset.fontFamily === currentFont;
+      btn.classList.toggle('active', isInitialActive);
+      btn.setAttribute('aria-pressed', isInitialActive ? 'true' : 'false');
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const selectedFont = btn.dataset.fontFamily;
+        if (!validFonts.includes(selectedFont)) return;
+
+        articleProse.classList.remove('font-serif-mode', 'font-sans-mode');
+        articleProse.classList.add(`font-${selectedFont}-mode`);
+
+        fontButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         btn.classList.add('active');
-        savedPrefs.font = btn.dataset.fontFamily;
-        localStorage.setItem('eureka-reader-prefs', JSON.stringify(savedPrefs));
+        btn.setAttribute('aria-pressed', 'true');
+
+        savedPrefs.font = selectedFont;
+        try {
+          localStorage.setItem('eureka-reader-prefs', JSON.stringify(savedPrefs));
+        } catch (err) {}
       });
     });
   }
