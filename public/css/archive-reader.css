@@ -1,0 +1,826 @@
+/* ==========================================================================
+   ARCHIVE READER — Editorial UI/UX Design System Specification
+   Version: Alpha
+   Aesthetics: Full-bleed grid structure, glassy framing, Cinzel display,
+   Crimson Pro body prose, JetBrains Mono label metadata, and subtle depth.
+   ========================================================================== */
+
+:root {
+  /* Colors */
+  --ar-primary: #D9D1BD;
+  --ar-secondary: #C2A47A;
+  --ar-tertiary: #CEC6B2;
+  --ar-neutral: #FFFFFF;
+  --ar-background: #0d0e12;
+  --ar-surface: #D9D1BD;
+  --ar-surface-glass: rgba(206, 198, 178, 0.6);
+  --ar-surface-glass-dark: rgba(18, 19, 24, 0.78);
+  --ar-surface-glass-card: rgba(26, 27, 34, 0.82);
+  --ar-text-primary: #555047;
+  --ar-text-light: #ECE5D8;
+  --ar-text-secondary: #8B8274;
+  --ar-text-muted: #9E9585;
+  --ar-border: #555047;
+  --ar-border-light: rgba(196, 188, 159, 0.4);
+  --ar-border-white: 0.8px solid #FFFFFF;
+  --ar-border-crimson: 0.8px solid #A33B3B;
+  --ar-border-sand: 0.8px solid #C4BC9F;
+  --ar-border-dark: 0.8px solid #555047;
+  --ar-accent: #D9D1BD;
+
+  /* Typography */
+  --ar-font-display: "Cinzel", Georgia, "Times New Roman", serif;
+  --ar-font-body: "Crimson Pro", Georgia, serif;
+  --ar-font-label: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Base Rhythm Spacing Scale */
+  --ar-space-base: 4px;
+  --ar-space-sm: 2px;
+  --ar-space-md: 3.2px;
+  --ar-space-lg: 4px;
+  --ar-space-xl: 8px;
+  --ar-space-12: 12px;
+  --ar-space-16: 16px;
+  --ar-space-24: 24px;
+  --ar-space-32: 32px;
+  --ar-space-40: 40px;
+  --ar-space-48: 48px;
+  --ar-gap: 8px;
+  --ar-card-padding: 8px;
+  --ar-section-padding: 24px;
+
+  /* Shapes */
+  --ar-radius-0: 0px;
+  --ar-radius-2: 2px;
+  --ar-radius-pill: 9999px;
+
+  /* Elevation & Depth */
+  --ar-blur: 4px;
+  --ar-shadow-deep: 0px 20px 70px -15px rgba(0, 0, 0, 0.9);
+  --ar-shadow-inset: 0px 2px 4px 0px rgba(0, 0, 0, 0.05) inset;
+
+  /* Motion */
+  --ar-motion-duration: 150ms;
+  --ar-motion-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hide default background canvas on post page in favor of ThreeJS WebGL Dot-Matrix Engine */
+body[data-page="post"] #dynamic-bg-canvas,
+body[data-page="post"] #eureka-ambient-bg {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Full-Bleed WebGL Dot-Matrix Particle Field Canvas
+   ========================================================================== */
+.archive-reader-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+  display: block;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+.archive-reader-canvas.webgl-active {
+  opacity: 1;
+}
+
+/* ThreeJS DOM Fallback if WebGL is unavailable */
+.archive-reader-fallback {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background: 
+    radial-gradient(circle at 50% 30%, rgba(20, 45, 25, 0.15) 0%, transparent 70%),
+    linear-gradient(to bottom, #070908 0%, #0d100e 100%);
+  background-size: 100% 100%;
+}
+
+/* ==========================================================================
+   Archive Reader Page Container & Grid Framing
+   ========================================================================== */
+body[data-page="post"] {
+  background-color: var(--ar-background);
+  color: var(--ar-text-light);
+  font-family: var(--ar-font-body);
+}
+
+/* Strong Grid Baseline Overlay (Subtle architectural lines) */
+.archive-reader-grid-frame {
+  width: 100%;
+  position: relative;
+}
+
+/* ==========================================================================
+   Archive Reader Full-Bleed Technical Header Bar
+   ========================================================================== */
+.archive-reader-status-bar {
+  width: 100%;
+  border-bottom: 0.8px solid var(--ar-border);
+  background: linear-gradient(to right, transparent, rgba(181, 171, 149, 0.12), transparent);
+  backdrop-filter: blur(var(--ar-blur));
+  -webkit-backdrop-filter: blur(var(--ar-blur));
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--ar-gap);
+  font-family: var(--ar-font-label);
+  font-size: 10.4px;
+  line-height: 15.6px;
+  letter-spacing: 2.08px;
+  text-transform: uppercase;
+  color: var(--ar-text-secondary);
+}
+
+.archive-status-left,
+.archive-status-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.archive-record-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ar-primary);
+  font-weight: 500;
+}
+
+.archive-record-indicator::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--ar-radius-pill);
+  background-color: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  animation: arPulse 2.4s infinite ease-in-out;
+}
+
+@keyframes arPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.archive-meta-chip {
+  padding: 2px 6px;
+  border: 0.8px solid var(--ar-border);
+  border-radius: var(--ar-radius-0);
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--ar-tertiary);
+  font-size: 9.6px;
+}
+
+/* ==========================================================================
+   Full Bleed Content Header Section (Display Typography)
+   ========================================================================== */
+.archive-reader-hero {
+  width: 100%;
+  padding: var(--ar-space-40) var(--ar-space-24) var(--ar-space-32);
+  border-bottom: 0.8px solid var(--ar-border);
+  background: 
+    linear-gradient(to bottom, transparent, rgba(138, 127, 105, 0.08)),
+    linear-gradient(to left, rgba(0, 0, 0, 0.2), transparent);
+  position: relative;
+}
+
+.archive-reader-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ar-space-16);
+}
+
+.archive-nav-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ar-font-label);
+  font-size: 10.4px;
+  line-height: 15.6px;
+  letter-spacing: 2.08px;
+  text-transform: uppercase;
+  color: var(--ar-text-secondary);
+}
+
+.archive-nav-breadcrumb a {
+  color: var(--ar-primary);
+  text-decoration: none;
+  padding: 0px;
+  border: 0px solid rgb(229, 231, 235);
+  border-radius: var(--ar-radius-0);
+  transition: color var(--ar-motion-duration) var(--ar-motion-easing);
+}
+
+.archive-nav-breadcrumb a:hover {
+  color: #FFFFFF;
+}
+
+.archive-nav-sep {
+  color: var(--ar-border);
+}
+
+/* Display-lg Specification: Cinzel, 80px, 400 weight, 64px line-height */
+.archive-display-title {
+  font-family: var(--ar-font-display);
+  font-size: clamp(2.4rem, 5.5vw, 80px);
+  font-weight: 400;
+  line-height: clamp(2.8rem, 5.8vw, 64px);
+  letter-spacing: -0.015em;
+  color: #FFFFFF;
+  margin: var(--ar-space-12) 0;
+  text-align: left;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+}
+
+.archive-display-subtitle {
+  font-family: var(--ar-font-body);
+  font-size: 20px;
+  line-height: 32px;
+  font-weight: 400;
+  color: var(--ar-tertiary);
+  max-width: 860px;
+  margin: 0 0 var(--ar-space-16) 0;
+  letter-spacing: 0.01em;
+}
+
+.archive-header-metadata-grid {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: var(--ar-space-16);
+  border-top: 0.8px solid rgba(196, 188, 159, 0.25);
+  font-family: var(--ar-font-label);
+  font-size: 10.4px;
+  line-height: 15.6px;
+  letter-spacing: 2.08px;
+  text-transform: uppercase;
+}
+
+.archive-meta-block {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ar-text-secondary);
+}
+
+.archive-meta-val {
+  color: var(--ar-primary);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Full Bleed 2-Column Grid Layout Structure (Sidebar + Inset Main Shell)
+   ========================================================================== */
+.archive-reader-layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--ar-space-32) var(--ar-space-24) var(--ar-space-48);
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .archive-reader-layout {
+    grid-template-columns: 1fr;
+    padding: var(--ar-space-24) var(--ar-space-16);
+  }
+}
+
+/* ==========================================================================
+   Left Sticky Sidebar — Glassy Framing & HUD
+   ========================================================================== */
+.archive-sidebar {
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 10;
+}
+
+@media (max-width: 1024px) {
+  .archive-sidebar {
+    position: static;
+  }
+}
+
+/* Detected Card Surfaces */
+.archive-card {
+  border-radius: var(--ar-radius-0);
+  padding: 12px;
+  box-shadow: none;
+  background: var(--ar-surface-glass-dark);
+  backdrop-filter: blur(var(--ar-blur));
+  -webkit-backdrop-filter: blur(var(--ar-blur));
+  border: 0.8px solid var(--ar-border);
+  position: relative;
+  transition: border-color var(--ar-motion-duration) var(--ar-motion-easing);
+}
+
+.archive-card:hover {
+  border-color: var(--ar-primary);
+}
+
+/* Glassy Card with 0.8px #C4BC9F border & inset shadow */
+.archive-card-glass {
+  background: rgba(22, 23, 28, 0.78);
+  backdrop-filter: blur(var(--ar-blur));
+  -webkit-backdrop-filter: blur(var(--ar-blur));
+  border: 0.8px solid rgba(196, 188, 159, 0.4);
+  border-radius: var(--ar-radius-0);
+  padding: 24px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05) inset;
+}
+
+/* Secondary sand surface card */
+.archive-card-surface-sand {
+  background: rgba(217, 209, 189, 0.12);
+  border: 0.8px solid rgba(196, 188, 159, 0.3);
+  border-radius: var(--ar-radius-0);
+  padding: 8px;
+  box-shadow: none;
+}
+
+.archive-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--ar-font-label);
+  font-size: 10.4px;
+  line-height: 15.6px;
+  letter-spacing: 2.08px;
+  text-transform: uppercase;
+  color: var(--ar-secondary);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 0.8px solid rgba(196, 188, 159, 0.2);
+}
+
+/* Dynamic Table of Contents Links */
+.archive-toc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.archive-toc-link {
+  font-family: var(--ar-font-body);
+  font-size: 14.5px;
+  line-height: 20px;
+  color: var(--ar-text-secondary);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-left: 2px solid transparent;
+  border-radius: var(--ar-radius-0);
+  transition: all var(--ar-motion-duration) var(--ar-motion-easing);
+  display: block;
+}
+
+.archive-toc-link:hover {
+  color: #FFFFFF;
+  background: rgba(217, 209, 189, 0.08);
+}
+
+.archive-toc-link.active {
+  color: var(--ar-primary);
+  border-left-color: var(--ar-secondary);
+  background: rgba(217, 209, 189, 0.12);
+  font-weight: 600;
+}
+
+.archive-toc-link.sub-heading {
+  padding-left: 16px;
+  font-size: 13.5px;
+}
+
+/* Sidebar Related Dispatches */
+.archive-related-item {
+  display: block;
+  text-decoration: none;
+  padding: 10px;
+  border: 0.8px solid rgba(85, 80, 71, 0.5);
+  border-radius: var(--ar-radius-0);
+  background: rgba(14, 15, 18, 0.6);
+  margin-bottom: 8px;
+  transition: all var(--ar-motion-duration) var(--ar-motion-easing);
+}
+
+.archive-related-item:hover {
+  border-color: var(--ar-primary);
+  background: rgba(217, 209, 189, 0.06);
+}
+
+.archive-related-cat {
+  font-family: var(--ar-font-label);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ar-secondary);
+  margin-bottom: 4px;
+}
+
+.archive-related-title {
+  font-family: var(--ar-font-display);
+  font-size: 14px;
+  line-height: 18px;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+/* ==========================================================================
+   GRADIENT BORDER SHELL TECHNIQUE (HERO EDGE TREATMENT)
+   Use a thin gradient border shell around the main card. Wrap the surface
+   in an outer shell with 2px padding and a 2px radius. Drive the shell with
+   linear-gradient(135deg, rgba(255, 100, 100, 0.5) 0%, rgba(100, 100, 255, 0.2) 100%)
+   so the edge reads like premium depth instead of a flat stroke.
+   ========================================================================== */
+.archive-gradient-shell {
+  background: linear-gradient(135deg, rgba(255, 100, 100, 0.5) 0%, rgba(100, 100, 255, 0.2) 100%);
+  padding: 2px;
+  border-radius: var(--ar-radius-2);
+  box-shadow: var(--ar-shadow-deep);
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.archive-gradient-shell-inner {
+  border-radius: 1.4px;
+  background: rgba(16, 17, 22, 0.94);
+  backdrop-filter: blur(var(--ar-blur));
+  -webkit-backdrop-filter: blur(var(--ar-blur));
+  box-shadow: var(--ar-shadow-inset);
+  border: 0.8px solid rgba(196, 188, 159, 0.35);
+  padding: 32px 36px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .archive-gradient-shell-inner {
+    padding: 20px 16px;
+  }
+}
+
+/* ==========================================================================
+   Archive Reader Controls Toolbar
+   ========================================================================== */
+.archive-reader-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  margin-bottom: var(--ar-space-32);
+  border-radius: var(--ar-radius-0);
+  background: rgba(26, 27, 33, 0.65);
+  border: 0.8px solid var(--ar-border);
+  flex-wrap: wrap;
+  gap: var(--ar-gap);
+}
+
+.archive-ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.archive-ctrl-label {
+  font-family: var(--ar-font-label);
+  font-size: 10.4px;
+  line-height: 15.6px;
+  letter-spacing: 2.08px;
+  text-transform: uppercase;
+  color: var(--ar-text-secondary);
+}
+
+.archive-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Button & Link Specification */
+.archive-ctrl-btn {
+  font-family: var(--ar-font-label);
+  font-size: 10.4px;
+  line-height: 15.6px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--ar-text-primary);
+  background: rgba(217, 209, 189, 0.15);
+  border: 0.8px solid var(--ar-border);
+  border-radius: var(--ar-radius-0);
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all var(--ar-motion-duration) var(--ar-motion-easing);
+}
+
+.archive-ctrl-btn:hover {
+  color: #FFFFFF;
+  border-color: var(--ar-primary);
+  background: rgba(217, 209, 189, 0.28);
+}
+
+.archive-ctrl-btn.active {
+  background: var(--ar-primary);
+  color: #111215;
+  border-color: var(--ar-primary);
+  font-weight: 600;
+}
+
+/* Detected Button Link Component: text #555047, radius 0px, padding 0px, border 0px solid rgb(229, 231, 235) */
+.archive-button-link {
+  color: var(--ar-text-primary);
+  font-family: var(--ar-font-label);
+  font-size: 10.4px;
+  line-height: 15.6px;
+  letter-spacing: 2.08px;
+  text-transform: uppercase;
+  border-radius: var(--ar-radius-0);
+  padding: 0px;
+  border: 0px solid rgb(229, 231, 235);
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--ar-motion-duration) var(--ar-motion-easing);
+}
+
+.archive-button-link:hover {
+  color: var(--ar-primary);
+}
+
+/* ==========================================================================
+   PROSE READING SPECIFICATION: Crimson Pro, 16.8px, 400 weight, 27.3px line-height
+   ========================================================================== */
+.archive-prose-content {
+  font-family: var(--ar-font-body);
+  font-size: 16.8px;
+  font-weight: 400;
+  line-height: 27.3px;
+  color: var(--ar-text-light);
+  letter-spacing: 0.008em;
+  max-width: 72ch;
+  margin: 0 auto;
+}
+
+.archive-prose-content p {
+  margin-bottom: var(--ar-space-24);
+  font-size: 16.8px;
+  line-height: 27.3px;
+}
+
+/* Display & Section Headings */
+.archive-prose-content h2 {
+  font-family: var(--ar-font-display);
+  font-size: clamp(1.8rem, 3.2vw, 34px);
+  font-weight: 400;
+  line-height: 1.25;
+  color: #FFFFFF;
+  margin-top: var(--ar-space-40);
+  margin-bottom: var(--ar-space-16);
+  padding-bottom: 8px;
+  border-bottom: 0.8px solid var(--ar-border);
+  letter-spacing: -0.01em;
+  scroll-margin-top: 100px;
+}
+
+.archive-prose-content h3 {
+  font-family: var(--ar-font-display);
+  font-size: clamp(1.4rem, 2.4vw, 24px);
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--ar-primary);
+  margin-top: var(--ar-space-32);
+  margin-bottom: var(--ar-space-12);
+  scroll-margin-top: 100px;
+}
+
+.archive-prose-content blockquote {
+  margin: var(--ar-space-24) 0;
+  padding: 16px 24px;
+  background: rgba(217, 209, 189, 0.08);
+  border-left: 2px solid var(--ar-secondary);
+  border-radius: var(--ar-radius-0);
+  font-family: var(--ar-font-body);
+  font-style: italic;
+  font-size: 18.5px;
+  line-height: 29px;
+  color: #FFFFFF;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05) inset;
+}
+
+.archive-prose-content blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.archive-prose-content ul,
+.archive-prose-content ol {
+  margin-bottom: var(--ar-space-24);
+  padding-left: 24px;
+}
+
+.archive-prose-content li {
+  margin-bottom: 8px;
+  line-height: 27.3px;
+}
+
+.archive-prose-content hr {
+  border: none;
+  height: 0.8px;
+  background: linear-gradient(to right, transparent, var(--ar-border), transparent);
+  margin: var(--ar-space-40) 0;
+}
+
+/* Figures, Diagrams & Image Framing */
+.archive-prose-content figure {
+  margin: var(--ar-space-32) 0;
+  border-radius: var(--ar-radius-2);
+  overflow: hidden;
+  border: 0.8px solid var(--ar-border);
+  background: rgba(14, 15, 18, 0.9);
+  padding: 8px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.archive-prose-content figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--ar-radius-0);
+}
+
+.archive-prose-content figcaption {
+  font-family: var(--ar-font-label);
+  font-size: 10.4px;
+  line-height: 15.6px;
+  letter-spacing: 2.08px;
+  text-transform: uppercase;
+  color: var(--ar-text-secondary);
+  text-align: center;
+  padding: 8px 4px 2px;
+}
+
+/* Tables in Archive Reader */
+.archive-prose-content .table-scroll-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: var(--ar-space-32) 0;
+  border: 0.8px solid var(--ar-border);
+  border-radius: var(--ar-radius-0);
+  background: rgba(18, 19, 24, 0.85);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05) inset;
+}
+
+.archive-prose-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--ar-font-body);
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.archive-prose-content th {
+  background: rgba(217, 209, 189, 0.12);
+  font-family: var(--ar-font-label);
+  font-size: 10.4px;
+  line-height: 15.6px;
+  letter-spacing: 2.08px;
+  text-transform: uppercase;
+  color: var(--ar-primary);
+  padding: 10px 14px;
+  border-bottom: 0.8px solid var(--ar-border);
+  text-align: left;
+}
+
+.archive-prose-content td {
+  padding: 10px 14px;
+  border-bottom: 0.8px solid rgba(85, 80, 71, 0.4);
+  color: var(--ar-text-light);
+}
+
+.archive-prose-content tr:hover td {
+  background: rgba(217, 209, 189, 0.04);
+}
+
+/* Code & Pre Blocks */
+.archive-prose-content pre {
+  margin: var(--ar-space-24) 0;
+  padding: 16px;
+  background: #0b0c0f;
+  border: 0.8px solid var(--ar-border);
+  border-radius: var(--ar-radius-0);
+  font-family: var(--ar-font-label);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #38bdf8;
+  overflow-x: auto;
+  position: relative;
+}
+
+.archive-prose-content code {
+  font-family: var(--ar-font-label);
+  font-size: 0.88em;
+  background: rgba(217, 209, 189, 0.14);
+  color: var(--ar-primary);
+  padding: 2px 6px;
+  border-radius: var(--ar-radius-0);
+}
+
+.archive-prose-content pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* ==========================================================================
+   Article Interaction Bar & Actions (Minimal 150ms transitions)
+   ========================================================================== */
+.archive-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--ar-space-40);
+  padding-top: var(--ar-space-24);
+  border-top: 0.8px solid var(--ar-border);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.archive-action-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.archive-action-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(217, 209, 189, 0.08);
+  border: 0.8px solid var(--ar-border);
+  border-radius: var(--ar-radius-0);
+  font-family: var(--ar-font-label);
+  font-size: 10.4px;
+  line-height: 15.6px;
+  letter-spacing: 2.08px;
+  text-transform: uppercase;
+  color: var(--ar-primary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--ar-motion-duration) var(--ar-motion-easing);
+}
+
+.archive-action-pill:hover {
+  background: rgba(217, 209, 189, 0.18);
+  border-color: var(--ar-primary);
+  color: #FFFFFF;
+}
+
+.archive-action-pill.active {
+  background: var(--ar-primary);
+  color: #111215;
+  border-color: var(--ar-primary);
+}
+
+.archive-pill-count {
+  font-weight: 600;
+  color: var(--ar-secondary);
+}
+
+.archive-action-pill.active .archive-pill-count {
+  color: #111215;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 640px) {
+  .archive-reader-hero {
+    padding: var(--ar-space-24) var(--ar-space-16);
+  }
+  .archive-status-bar {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+}

@@ -1,46 +1,81 @@
 <%- include('../partials/head') %>
 
-<main class="article-page-main">
-  <!-- Authoritative Left-Aligned Editorial Article Header -->
-  <header class="article-header">
-    <div class="container article-header-container">
+<!-- WebGL Dot-Matrix Particle Field Canvas (ThreeJS Full-Bleed Spatial Background) -->
+<canvas id="archive-reader-canvas" class="archive-reader-canvas" width="1365" height="928" style="display: block; width: 100vw; height: 100vh;" aria-hidden="true"></canvas>
+<div class="archive-reader-fallback" id="archive-reader-fallback" aria-hidden="true"></div>
+
+<main class="archive-reader-grid-frame">
+  <!-- Archive Reader Full-Bleed Technical Header Ribbon -->
+  <aside class="archive-reader-status-bar" aria-label="Archive Status Bar">
+    <div class="archive-status-left">
+      <span class="archive-record-indicator">ARCHIVE RECORD: #<%= (post.id || post.slug).slice(0, 18).toUpperCase() %></span>
+      <span class="archive-meta-chip">INDEX: <%= (post.category || 'INQUIRY').toUpperCase() %></span>
+      <span class="archive-meta-chip">VOL. 01</span>
+    </div>
+    <div class="archive-status-right">
+      <span>READING TIME: <%= post.readingTime %></span>
+      <span class="archive-meta-chip">RETRIEVED // LIVE</span>
+    </div>
+  </aside>
+
+  <!-- Full-Bleed Hero Header Section with Cinzel Display Typography -->
+  <header class="archive-reader-hero">
+    <div class="archive-reader-hero-inner">
       <!-- Breadcrumb Bar -->
-      <nav class="article-breadcrumb" aria-label="Breadcrumb">
-        <a href="/">Eureka</a>
-        <span class="breadcrumb-sep">/</span>
-        <a href="/category/<%= encodeURIComponent(post.category) %>"><%= post.category %></a>
-        <span class="breadcrumb-sep">/</span>
-        <span class="breadcrumb-current">Essay</span>
+      <nav class="archive-nav-breadcrumb" aria-label="Breadcrumb">
+        <a href="/">ARCHIVE</a>
+        <span class="archive-nav-sep">/</span>
+        <a href="/category/<%= encodeURIComponent(post.category) %>"><%= post.category.toUpperCase() %></a>
+        <span class="archive-nav-sep">/</span>
+        <span style="color: var(--ar-tertiary);">DOC.<%= post.slug.slice(0, 12).toUpperCase() %></span>
       </nav>
 
-      <div class="article-kicker">
-        <span class="badge badge-accent"><%= post.category %></span>
-        <span class="kicker-sep">•</span>
-        <span class="kicker-item"><%= post.readingTime %></span>
-        <span class="kicker-sep">•</span>
-        <span class="kicker-item"><%= post.publishedAt %></span>
-      </div>
-
-      <h1 class="article-headline"><%= post.title %></h1>
+      <!-- Display-lg: Cinzel, 80px, 400 weight, 64px line-height -->
+      <h1 class="archive-display-title"><%= post.title %></h1>
 
       <% if (post.subtitle) { %>
-        <p class="article-deck"><%= post.subtitle %></p>
+        <!-- Body-md: Crimson Pro supporting deck -->
+        <p class="archive-display-subtitle"><%= post.subtitle %></p>
       <% } %>
 
+      <!-- Technical Metadata Grid -->
+      <div class="archive-header-metadata-grid">
+        <div class="archive-meta-block">
+          <span>CLASSIFICATION:</span>
+          <span class="archive-meta-val"><%= post.category %></span>
+        </div>
+        <span class="archive-nav-sep">•</span>
+        <div class="archive-meta-block">
+          <span>PUBLISHED:</span>
+          <span class="archive-meta-val"><%= post.publishedAt %></span>
+        </div>
+        <span class="archive-nav-sep">•</span>
+        <div class="archive-meta-block">
+          <span>EST. SCAN TIME:</span>
+          <span class="archive-meta-val"><%= post.readingTime %></span>
+        </div>
+        <% if (post.author && post.author.name) { %>
+          <span class="archive-nav-sep">•</span>
+          <div class="archive-meta-block">
+            <span>RESEARCH BOARD:</span>
+            <span class="archive-meta-val"><%= post.author.name %></span>
+          </div>
+        <% } %>
+      </div>
     </div>
   </header>
 
-  <!-- Article Layout: Left Sidebar (TOC + Other Topics) + Main Reading Container -->
-  <div class="article-layout-wrapper">
+  <!-- Full Bleed 2-Column Grid Layout: Glassy Sidebar + Gradient Shell Reading Surface -->
+  <div class="archive-reader-layout">
     
-    <!-- Left Sticky Sidebar -->
-    <aside class="article-sidebar-left" aria-label="Reading tools and related topics">
-      <div class="sidebar-sticky-inner">
-        
-        <!-- Interactive Dynamic Table of Contents -->
-        <div id="table-of-contents-box" class="toc-sidebar-box">
-          <div class="toc-header">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Left Sticky Sidebar: Glassy HUD Cards -->
+    <aside class="archive-sidebar" aria-label="Reading navigation & dispatches">
+      
+      <!-- Interactive Table of Contents Glassy Card -->
+      <div id="archive-toc-box" class="archive-card archive-card-glass" style="display: none;">
+        <div class="archive-card-header">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="21" y1="10" x2="7" y2="10"></line>
               <line x1="21" y1="6" x2="3" y2="6"></line>
               <line x1="21" y1="14" x2="3" y2="14"></line>
@@ -48,191 +83,161 @@
             </svg>
             <span>TABLE OF CONTENTS</span>
           </div>
-          <nav id="toc-nav-list" class="toc-nav-list" aria-label="Table of Contents Links">
-            <!-- Dynamically populated by JS from h2 and h3 elements -->
-          </nav>
+          <span class="archive-meta-chip">INDEX</span>
         </div>
+        <nav id="archive-toc-list" class="archive-toc-list" aria-label="Table of Contents Links">
+          <!-- Dynamically populated from h2 and h3 elements -->
+        </nav>
+      </div>
 
-        <!-- Instagram Channel Highlight Widget -->
-        <div class="sidebar-ig-card">
-          <div class="sidebar-ig-head">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Instagram Editorial Channel Card -->
+      <div class="archive-card archive-card-glass">
+        <div class="archive-card-header">
+          <div style="display: flex; align-items: center; gap: 6px; color: var(--ar-secondary);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
               <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
             </svg>
-            <strong>@eureka.discoveries</strong>
+            <span>FIELD DISPATCHES</span>
           </div>
-          <p class="sidebar-ig-text">
-            Explore daily visual summaries & cognitive maps for this topic on Instagram.
-          </p>
-          <a href="<%= siteConfig.instagramUrl %>" target="_blank" rel="noopener noreferrer" class="sidebar-ig-link">
-            Open Channel →
-          </a>
+        </div>
+        <p style="font-family: var(--ar-font-body); font-size: 14px; line-height: 22px; color: var(--ar-text-secondary); margin: 0 0 10px 0;">
+          Explore daily visual diagrams, cognitive maps, and illustrated models on Instagram.
+        </p>
+        <a href="<%= siteConfig.instagramUrl %>" target="_blank" rel="noopener noreferrer" class="archive-button-link" style="color: var(--ar-primary);">
+          <span>ACCESS CHANNEL @EUREKA.DISCOVERIES →</span>
+        </a>
+      </div>
+
+      <!-- Related Dispatches Mini Cards -->
+      <% if (typeof otherPosts !== 'undefined' && otherPosts && otherPosts.length > 0) { %>
+        <div class="archive-card">
+          <div class="archive-card-header">
+            <span>RELATED DISPATCHES</span>
+            <span class="archive-meta-chip"><%= otherPosts.slice(0, 2).length %> ARCHIVES</span>
+          </div>
+          <% otherPosts.slice(0, 2).forEach(other => { %>
+            <a href="/post/<%= other.slug %>" class="archive-related-item">
+              <div class="archive-related-cat"><%= other.category %></div>
+              <h4 class="archive-related-title"><%= other.title %></h4>
+            </a>
+          <% }) %>
+        </div>
+      <% } %>
+
+    </aside>
+
+    <!-- Main Content Container with Gradient Border Shell Technique -->
+    <div class="archive-gradient-shell">
+      <div class="archive-gradient-shell-inner">
+        
+        <!-- Reader Display Controls Toolbar -->
+        <div class="archive-reader-controls" role="toolbar" aria-label="Archive Reader Preferences">
+          <div class="archive-ctrl-group">
+            <span class="archive-ctrl-label">TYPE SIZE</span>
+            <div class="archive-btn-group" role="group" aria-label="Font size selector">
+              <button type="button" class="archive-ctrl-btn" data-ar-size="sm" title="Compact size">A-</button>
+              <button type="button" class="archive-ctrl-btn active" data-ar-size="md" title="Default 16.8px">A</button>
+              <button type="button" class="archive-ctrl-btn" data-ar-size="lg" title="Large size">A+</button>
+            </div>
+          </div>
+
+          <div class="archive-ctrl-group">
+            <span class="archive-ctrl-label">TYPOGRAPHY</span>
+            <div class="archive-btn-group" role="group" aria-label="Typography family selector">
+              <button type="button" class="archive-ctrl-btn active" data-ar-font="serif" title="Crimson Pro Serif">SERIF</button>
+              <button type="button" class="archive-ctrl-btn" data-ar-font="sans" title="Modern Sans">SANS</button>
+            </div>
+          </div>
+
+          <div class="archive-ctrl-group">
+            <span class="archive-ctrl-label">STATUS</span>
+            <span class="archive-meta-chip" style="color: #22c55e;">WEBGL MATRIX ON</span>
+          </div>
         </div>
 
-        <!-- Other Topics / Further Dispatches -->
-        <% if (typeof otherPosts !== 'undefined' && otherPosts && otherPosts.length > 0) { %>
-          <div class="other-topics-section">
-            <div class="sidebar-header">
-              <span class="sidebar-dot"></span>
-              <span class="sidebar-kicker">RELATED DISPATCHES</span>
-            </div>
+        <!-- Main Prose Content: Crimson Pro 16.8px, 400 weight, 27.3px line-height -->
+        <article class="archive-prose-content" id="archive-prose-content">
+          <%- post.renderedHtml %>
+        </article>
 
-            <% otherPosts.slice(0, 2).forEach(other => { %>
-              <a href="/post/<%= other.slug %>" class="other-topic-card" title="Read <%= other.title %>">
-                <div class="other-topic-body">
-                  <span class="badge" style="align-self: flex-start; margin-bottom: 4px;"><%= other.category %></span>
-                  <h4 class="other-topic-title"><%= other.title %></h4>
-                  <div class="other-topic-meta">
-                    <span><%= other.readingTime %></span>
-                    <span class="other-topic-arrow">Read →</span>
-                  </div>
-                </div>
-              </a>
+        <!-- Archive Reader Bottom Actions Bar -->
+        <div class="archive-actions-bar">
+          <div class="archive-action-group">
+            <button id="archive-clap-btn" class="archive-action-pill" data-slug="<%= post.slug %>" title="Applaud dispatch" aria-label="Applaud essay">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              <span>APPLAUD</span>
+              <span id="archive-clap-count" class="archive-pill-count"><%= post.claps || 0 %></span>
+            </button>
+
+            <button id="archive-save-btn" class="archive-action-pill" data-slug="<%= post.slug %>" data-title="<%= post.title %>" title="Save to Reading List" aria-label="Save to Reading List">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span>SAVE</span>
+            </button>
+          </div>
+
+          <div class="archive-action-group">
+            <button id="archive-share-btn" class="archive-action-pill" title="Copy shareable link" aria-label="Share this essay">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
+              <span>SHARE LINK</span>
+            </button>
+
+            <a href="<%= siteConfig.instagramUrl %>" target="_blank" rel="noopener noreferrer" class="archive-action-pill" title="View on Instagram">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              <span>INSTAGRAM ↗</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Indexed Topics Badges -->
+        <% if (post.tags && post.tags.length > 0) { %>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 24px; padding-top: 16px; border-top: 0.8px solid var(--ar-border);">
+            <span style="font-family: var(--ar-font-label); font-size: 10.4px; letter-spacing: 2.08px; color: var(--ar-text-secondary); text-transform: uppercase;">INDEXED TOPICS:</span>
+            <% post.tags.forEach(tag => { %>
+              <a href="/tag/<%= encodeURIComponent(tag) %>" class="archive-ctrl-btn" style="text-decoration: none;">#<%= tag %></a>
             <% }) %>
           </div>
         <% } %>
 
       </div>
-    </aside>
-
-    <!-- Main Reading Container -->
-    <div class="article-container">
-      
-      <!-- Reader Display Controls Bar -->
-      <div id="reader-controls-bar" class="reader-controls-bar" role="toolbar" aria-label="Reading display preferences">
-        <div class="reader-control-group">
-          <span class="reader-control-label">Type Size</span>
-          <div class="reader-btn-group" role="group" aria-label="Font size selection">
-            <button type="button" class="reader-control-btn" data-font-size="sm" title="Compact size (16px)" aria-label="Small font size" aria-pressed="false">A-</button>
-            <button type="button" class="reader-control-btn active" data-font-size="md" title="Default reading size (18px)" aria-label="Default font size" aria-pressed="true">A</button>
-            <button type="button" class="reader-control-btn" data-font-size="lg" title="Large size (21px)" aria-label="Large font size" aria-pressed="false">A+</button>
-          </div>
-        </div>
-
-        <div class="reader-control-group">
-          <span class="reader-control-label">Typography</span>
-          <div class="reader-btn-group" role="group" aria-label="Font family selection">
-            <button type="button" class="reader-control-btn active" data-font-family="serif" title="Editorial Newsreader Serif" aria-label="Serif typography" aria-pressed="true">Serif</button>
-            <button type="button" class="reader-control-btn" data-font-family="sans" title="Modern Plus Jakarta Sans" aria-label="Sans-serif typography" aria-pressed="false">Sans</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Prose Essay Content -->
-      <article class="article-prose" id="article-prose-content">
-        <%- post.renderedHtml %>
-      </article>
-      <script>
-        (function() {
-          try {
-            var prefs = JSON.parse(localStorage.getItem('eureka-reader-prefs') || '{}');
-            var s = (prefs.size === 'sm' || prefs.size === 'lg') ? prefs.size : 'md';
-            var f = (prefs.font === 'sans') ? 'sans' : 'serif';
-            var art = document.getElementById('article-prose-content');
-            if (art) {
-              art.classList.add('font-' + s);
-              art.classList.add('font-' + f + '-mode');
-            }
-          } catch (e) {}
-        })();
-      </script>
-
-      <!-- Clean, Professional SVG Action Bar -->
-      <div class="article-actions-bar">
-        <div class="action-btn-group">
-          <button id="clap-btn" class="action-btn" data-slug="<%= post.slug %>" title="Applaud essay" aria-label="Applaud essay">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-            <span class="action-btn-text">Applaud</span>
-            <span id="clap-count" class="action-btn-count"><%= post.claps || 0 %></span>
-          </button>
-
-          <button id="bookmark-btn" class="action-btn" data-slug="<%= post.slug %>" data-title="<%= post.title %>" title="Save to reading list" aria-label="Save to reading list">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <span class="action-btn-text">Save</span>
-          </button>
-        </div>
-
-        <div class="action-btn-group">
-          <button id="share-btn" class="action-btn" title="Copy share link" aria-label="Share this essay">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            </svg>
-            <span>Share</span>
-          </button>
-
-          <a href="<%= siteConfig.instagramUrl %>" target="_blank" rel="noopener noreferrer" class="action-btn action-btn-ig" title="View on Instagram">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-            <span>Instagram</span>
-          </a>
-        </div>
-      </div>
-
-
-
-      <!-- Instagram Callout Banner -->
-      <div class="article-ig-banner reading-reveal">
-        <div class="article-ig-banner-inner">
-          <div class="article-ig-icon-wrap">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-          </div>
-          <div class="article-ig-info">
-            <div class="article-ig-title">Continue the inquiry on Instagram</div>
-            <div class="article-ig-sub">Follow <strong>@eureka.discoveries</strong> for illustrated psychology breakdowns and mental models.</div>
-          </div>
-          <a href="<%= siteConfig.instagramUrl %>" target="_blank" rel="noopener noreferrer" class="article-ig-cta-btn">
-            Follow @eureka.discoveries ↗
-          </a>
-        </div>
-      </div>
-
-      <!-- Tags -->
-      <% if (post.tags && post.tags.length > 0) { %>
-        <div class="article-tags-row reading-reveal">
-          <span class="tags-label">INDEXED TOPICS:</span>
-          <% post.tags.forEach(tag => { %>
-            <a href="/tag/<%= encodeURIComponent(tag) %>" class="badge">#<%= tag %></a>
-          <% }) %>
-        </div>
-      <% } %>
-
     </div>
+
   </div>
 
-  <!-- Related Reading Section -->
+  <!-- Further Inquiries & Dispatches Section -->
   <% if (related && related.length > 0) { %>
-    <section class="related-dispatches-section reveal">
-      <div class="container" style="max-width: 900px;">
-        <div class="related-section-header">
-          <h3 class="related-section-title">Further Inquiries & Dispatches</h3>
-          <span class="related-section-rule"></span>
+    <section style="width: 100%; border-top: 0.8px solid var(--ar-border); background: rgba(14, 15, 18, 0.85); padding: 48px 24px;">
+      <div style="max-width: 1200px; margin: 0 auto;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 0.8px solid rgba(196, 188, 159, 0.3);">
+          <h3 style="font-family: var(--ar-font-display); font-size: 20px; font-weight: 400; color: #FFFFFF; margin: 0;">FURTHER INQUIRIES & DISPATCHES</h3>
+          <span class="archive-meta-chip">VOL. 01 DISPATCHES</span>
         </div>
 
-        <div class="related-dispatches-grid">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
           <% related.forEach(rel => { %>
-            <a href="/post/<%= rel.slug %>" class="related-dispatch-card reveal">
-              <span class="badge badge-accent" style="align-self: flex-start; margin-bottom: 8px;"><%= rel.category %></span>
-              <h4 class="related-dispatch-title"><%= rel.title %></h4>
-              <% if (rel.subtitle) { %>
-                <p class="related-dispatch-excerpt"><%= rel.subtitle %></p>
-              <% } %>
-              <div class="related-dispatch-meta">
+            <a href="/post/<%= rel.slug %>" class="archive-card archive-card-glass" style="text-decoration: none; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <span class="archive-meta-chip" style="margin-bottom: 8px; display: inline-block; color: var(--ar-secondary);"><%= rel.category %></span>
+                <h4 style="font-family: var(--ar-font-display); font-size: 17px; line-height: 24px; color: #FFFFFF; margin: 6px 0 10px 0;"><%= rel.title %></h4>
+                <% if (rel.subtitle) { %>
+                  <p style="font-family: var(--ar-font-body); font-size: 14.5px; line-height: 22px; color: var(--ar-text-secondary); margin: 0 0 16px 0;"><%= rel.subtitle %></p>
+                <% } %>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; font-family: var(--ar-font-label); font-size: 10px; letter-spacing: 1.5px; color: var(--ar-primary); padding-top: 12px; border-top: 0.8px solid rgba(85, 80, 71, 0.4);">
                 <span><%= rel.readingTime %></span>
-                <span class="related-dispatch-arrow">Read Essay →</span>
+                <span style="color: var(--ar-secondary);">ACCESS RECORD →</span>
               </div>
             </a>
           <% }) %>
